@@ -3,7 +3,6 @@ import { AstNode, EmptyFileSystem, LangiumDocument, LangiumServices } from 'lang
 import { parseHelper } from "langium/test";
 import { DocumentSymbol, TextDocumentIdentifier, SymbolKind } from 'vscode-languageserver';
 import { BigBlock } from '../language-server/generated/ast';
-import { assert } from 'console';
 
 function textDocumentParams(document: LangiumDocument): { textDocument: TextDocumentIdentifier } {
   return { textDocument: { uri: document.textDocument.uri } };
@@ -57,7 +56,7 @@ describe('Document Symbol Provider', () => {
   it('does a thing', async () => {
     const { document , symbols } = await symbolizer(text);
 
-    assert(document); 
+    expect(document).toBeDefined();
     expect(symbols?.[0].kind).toEqual(SymbolKind.Class);
     expect(symbols?.[0].children?.map(blocks => blocks.kind)).toEqual([SymbolKind.Field,SymbolKind.Field]);
     expect(symbols?.[0].children?.map(blocks => blocks.children?.map(properties => properties.kind))).toEqual([[SymbolKind.Method,SymbolKind.Method],[SymbolKind.Method,SymbolKind.Method]]);
