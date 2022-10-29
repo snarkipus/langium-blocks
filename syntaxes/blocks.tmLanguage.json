@@ -1,0 +1,31 @@
+{
+  "name": "blocks",
+  "scopeName": "source.blocks",
+  "fileTypes": [
+    ".block"
+  ],
+  "patterns": [
+    {
+      "include": "#comments"
+    },
+    {
+      "name": "keyword.control.blocks",
+      "match": "\\b(BigBlock|EndBigBlock|EndBlockA|EndBlockB|EndCommentTokenA|EndCommentTokenB|Property)\\b"
+    },
+    {
+      "name": "string.quoted.double.blocks",
+      "begin": "\"",
+      "end": "\""
+    },
+    {
+      "name": "string.quoted.single.blocks",
+      "begin": "'",
+      "end": "'"
+    }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": []
+    }
+  }
+}

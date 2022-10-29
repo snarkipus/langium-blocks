@@ -1,0 +1,12 @@
+{
+    "projectName": "Blocks",
+    "languages": [{
+        "id": "blocks",
+        "grammar": "src/language-server/blocks.langium",
+        "fileExtensions": [".block"],
+        "textMate": {
+            "out": "syntaxes/blocks.tmLanguage.json"
+        }
+    }],
+    "out": "src/language-server/generated"
+}

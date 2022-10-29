@@ -1,0 +1,21 @@
+BigBlock
+
+  BlockA
+    comment text line 1
+    comment text line 2
+    comment text line n
+    EndCommentTokenA someName
+    Property propA
+    Property propB
+  EndBlockA
+
+  BlockB
+    comment text line 1
+    comment text line 2
+    comment text line n
+    EndCommentTokenB anotherName
+    Property propC
+    Property propD
+  EndBlockB
+  
+EndBigBlock
