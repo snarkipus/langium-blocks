@@ -1,6 +1,5 @@
 import { AstNode, CstNode, DefaultDocumentSymbolProvider, LangiumDocument } from "langium";
 import { DocumentSymbol, SymbolKind } from "vscode-languageserver";
-// import { isSJMember } from "../language-server/generated/ast";
 
 import { BlocksServices } from "./blocks-module";
 import { isBlockA, isBlockB } from "./generated/ast";
@@ -44,6 +43,6 @@ export class BlocksDocumentSymbolProvider extends DefaultDocumentSymbolProvider 
         } else if ( isBlockB(node)) {
             name = 'BlockB';
         } 
-        return name!;
+        return name ?? nameNode.text;
     }
 }

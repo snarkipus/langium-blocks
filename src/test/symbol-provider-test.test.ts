@@ -1,15 +1,16 @@
 import { BlocksServices, createBlocksServices } from '../language-server/blocks-module';
 import { AstNode, EmptyFileSystem, LangiumDocument, LangiumServices } from 'langium';
 import { parseHelper } from "langium/test";
-import { DocumentSymbol, TextDocumentIdentifier } from 'vscode-languageserver';
+import { DocumentSymbol, TextDocumentIdentifier, SymbolKind } from 'vscode-languageserver';
 import { BigBlock } from '../language-server/generated/ast';
+import { assert } from 'console';
 
 function textDocumentParams(document: LangiumDocument): { textDocument: TextDocumentIdentifier } {
   return { textDocument: { uri: document.textDocument.uri } };
 }
 
 export interface symbolProviderResult<T extends AstNode = AstNode> {
-  symbols: DocumentSymbol[] | undefined;
+  symbols?: DocumentSymbol[];
   document: LangiumDocument<T>;
 }
 
@@ -54,8 +55,11 @@ describe('Document Symbol Provider', () => {
   })
 
   it('does a thing', async () => {
-    const { document/*? */, symbols } = await symbolizer(text);
-    expect(symbols).toBeDefined();
-    console.log(document.parseResult.value);
+    const { document , symbols } = await symbolizer(text);
+
+    assert(document); 
+    expect(symbols?.[0].kind).toEqual(SymbolKind.Class);
+    expect(symbols?.[0].children?.map(blocks => blocks.kind)).toEqual([SymbolKind.Field,SymbolKind.Field]);
+    expect(symbols?.[0].children?.map(blocks => blocks.children?.map(properties => properties.kind))).toEqual([[SymbolKind.Method,SymbolKind.Method],[SymbolKind.Method,SymbolKind.Method]]);
   });
 });
