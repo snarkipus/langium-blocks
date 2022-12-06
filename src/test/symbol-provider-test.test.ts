@@ -8,12 +8,12 @@ function textDocumentParams(document: LangiumDocument): { textDocument: TextDocu
   return { textDocument: { uri: document.textDocument.uri } };
 }
 
-export interface symbolProviderResult<T extends AstNode = AstNode> {
+export interface SymbolProviderResult<T extends AstNode = AstNode> {
   symbols?: DocumentSymbol[];
   document: LangiumDocument<T>;
 }
 
-export function symbolProviderHelper<T extends AstNode = AstNode>(services: LangiumServices): (input: string) => Promise<symbolProviderResult> {
+export function symbolProviderHelper<T extends AstNode = AstNode>(services: LangiumServices): (input: string) => Promise<SymbolProviderResult> {
   const parse = parseHelper<T>(services);
   return async (input) => {
       const document = await parse(input);
@@ -24,7 +24,8 @@ export function symbolProviderHelper<T extends AstNode = AstNode>(services: Lang
 describe('Document Symbol Provider', () => {
   let services : BlocksServices;
   let text : string;
-  let symbolizer : (input: string) => Promise<symbolProviderResult>;
+  let symbolizer : (input: string) => Promise<SymbolProviderResult>;
+  let result: SymbolProviderResult;
 
   beforeAll(() => {
     services = createBlocksServices(EmptyFileSystem).Blocks;
@@ -35,7 +36,7 @@ describe('Document Symbol Provider', () => {
         comment text line 1
         comment text line 2
         comment text line n
-        EndCommentTokenA someName
+        SpecialProp someName
         Property propA
         Property propB
       EndBlockA
@@ -44,21 +45,49 @@ describe('Document Symbol Provider', () => {
         comment text line 1
         comment text line 2
         comment text line n
-        EndCommentTokenB anotherName
+        SpecialProp anotherName
         Property propC
         Property propD
       EndBlockB
   
     EndBigBlock
-    `;
+    `.trim();
   })
 
-  it('does a thing', async () => {
-    const { document , symbols } = await symbolizer(text);
+  beforeEach( async () => {
+    result = await symbolizer(text);
+  })
 
-    expect(document).toBeDefined();
-    expect(symbols?.[0].kind).toEqual(SymbolKind.Class);
-    expect(symbols?.[0].children?.map(blocks => blocks.kind)).toEqual([SymbolKind.Field,SymbolKind.Field]);
-    expect(symbols?.[0].children?.map(blocks => blocks.children?.map(properties => properties.kind))).toEqual([[SymbolKind.Method,SymbolKind.Method],[SymbolKind.Method,SymbolKind.Method]]);
+  it('generates the correct symbols for BigBlock', async () => {
+    // BigBlock => Class Symbol
+    expect(result.symbols?.[0].kind).toEqual(SymbolKind.Class);
+    console.log(result.document.parseResult.value);
+  });
+    
+  it('generates the correct symbols for Blocks', async () => {
+    // BlockA => Field Symbol
+    // BlockB => Field Symbol
+    expect(result.symbols?.[0]
+            .children?.map(blocks => {
+              blocks.kind
+            })
+          ).toEqual([SymbolKind.Field,SymbolKind.Field]);
+  });
+  
+  it('generates the correct symbols for BigBlock', async () => {
+    // propA => Method Symbol
+    // propB => Method Symbol
+    // propC => Method Symbol
+    // propD => Method Symbol
+    expect(result.symbols?.[0]
+            .children?.map(blocks => {
+              blocks.children?.map(properties => {
+                properties.kind
+              })
+            })
+          ).toEqual([
+            [SymbolKind.Method,SymbolKind.Method],
+            [SymbolKind.Method,SymbolKind.Method]
+          ]);
   });
 });

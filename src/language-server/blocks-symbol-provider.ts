@@ -10,7 +10,7 @@ export class BlocksDocumentSymbolProvider extends DefaultDocumentSymbolProvider 
         super(services);
     }
 
-    protected getSymbol(document: LangiumDocument, astNode: AstNode): DocumentSymbol[] {
+    protected override getSymbol(document: LangiumDocument, astNode: AstNode): DocumentSymbol[] {
         const node = astNode.$cstNode;//?
         const nameNode = this.nameProvider.getNameNode(astNode);
         if (nameNode && node) {
@@ -40,7 +40,7 @@ export class BlocksDocumentSymbolProvider extends DefaultDocumentSymbolProvider 
         let name = this.nameProvider.getName(node);
         if (isBlockA(node)) {
             name = 'BlockA';
-        } else if ( isBlockB(node)) {
+        } else if (isBlockB(node)) {
             name = 'BlockB';
         } 
         return name ?? nameNode.text;

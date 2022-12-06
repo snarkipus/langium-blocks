@@ -90,29 +90,20 @@ export const BlocksGrammar = (): Grammar => loadedBlocksGrammar ?? (loadedBlocks
         "$type": "Group",
         "elements": [
           {
+            "$type": "RuleCall",
+            "rule": {
+              "$refText": "BlockHeaderA"
+            },
+            "arguments": []
+          },
+          {
             "$type": "Assignment",
-            "feature": "name",
+            "feature": "special",
             "operator": "=",
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$refText": "BlockHeaderA"
-              },
-              "arguments": []
-            }
-          },
-          {
-            "$type": "Keyword",
-            "value": "EndCommentTokenA"
-          },
-          {
-            "$type": "Assignment",
-            "feature": "param",
-            "operator": "=",
-            "terminal": {
-              "$type": "RuleCall",
-              "rule": {
-                "$refText": "ID"
+                "$refText": "SpecialProp"
               },
               "arguments": []
             }
@@ -150,29 +141,20 @@ export const BlocksGrammar = (): Grammar => loadedBlocksGrammar ?? (loadedBlocks
         "$type": "Group",
         "elements": [
           {
+            "$type": "RuleCall",
+            "rule": {
+              "$refText": "BlockHeaderB"
+            },
+            "arguments": []
+          },
+          {
             "$type": "Assignment",
-            "feature": "name",
+            "feature": "special",
             "operator": "=",
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$refText": "BlockHeaderB"
-              },
-              "arguments": []
-            }
-          },
-          {
-            "$type": "Keyword",
-            "value": "EndCommentTokenB"
-          },
-          {
-            "$type": "Assignment",
-            "feature": "param",
-            "operator": "=",
-            "terminal": {
-              "$type": "RuleCall",
-              "rule": {
-                "$refText": "ID"
+                "$refText": "SpecialProp"
               },
               "arguments": []
             }
@@ -193,6 +175,37 @@ export const BlocksGrammar = (): Grammar => loadedBlocksGrammar ?? (loadedBlocks
           {
             "$type": "Keyword",
             "value": "EndBlockB"
+          }
+        ]
+      },
+      "definesHiddenTokens": false,
+      "entry": false,
+      "fragment": false,
+      "hiddenTokens": [],
+      "parameters": [],
+      "wildcard": false
+    },
+    {
+      "$type": "ParserRule",
+      "name": "SpecialProp",
+      "definition": {
+        "$type": "Group",
+        "elements": [
+          {
+            "$type": "Keyword",
+            "value": "SpecialProp"
+          },
+          {
+            "$type": "Assignment",
+            "feature": "param",
+            "operator": "=",
+            "terminal": {
+              "$type": "RuleCall",
+              "rule": {
+                "$refText": "ID"
+              },
+              "arguments": []
+            }
           }
         ]
       },
@@ -249,7 +262,7 @@ export const BlocksGrammar = (): Grammar => loadedBlocksGrammar ?? (loadedBlocks
       "name": "BlockHeaderA",
       "definition": {
         "$type": "RegexToken",
-        "regex": "(BlockA)([\\\\s\\\\S]*?)(?=(EndCommentTokenA))"
+        "regex": "(BlockA)([\\\\s\\\\S]*?)(?=(SpecialProp))"
       },
       "fragment": false,
       "hidden": false
@@ -259,7 +272,7 @@ export const BlocksGrammar = (): Grammar => loadedBlocksGrammar ?? (loadedBlocks
       "name": "BlockHeaderB",
       "definition": {
         "$type": "RegexToken",
-        "regex": "(BlockB)([\\\\s\\\\S]*?)(?=(EndCommentTokenB))"
+        "regex": "(BlockB)([\\\\s\\\\S]*?)(?=(SpecialProp))"
       },
       "fragment": false,
       "hidden": false

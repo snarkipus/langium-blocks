@@ -4,7 +4,7 @@ import { AbstractElement, isCrossReference, isRuleCall } from "langium/lib/gramm
 export class BlocksValueConverter extends DefaultValueConverter {
 
   override convert(input: string, cstNode: CstNode): ValueType {
-    let feature: AbstractElement | undefined = cstNode.feature;
+    let feature: AbstractElement | undefined = cstNode.feature;//? 
     if (isCrossReference(feature)) {
         feature = getCrossReferenceTerminal(feature);
     }

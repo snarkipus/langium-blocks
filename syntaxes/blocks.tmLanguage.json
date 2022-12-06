@@ -10,7 +10,7 @@
     },
     {
       "name": "keyword.control.blocks",
-      "match": "\\b(BigBlock|EndBigBlock|EndBlockA|EndBlockB|EndCommentTokenA|EndCommentTokenB|Property)\\b"
+      "match": "\\b(BigBlock|EndBigBlock|EndBlockA|EndBlockB|Property|SpecialProp)\\b"
     },
     {
       "name": "string.quoted.double.blocks",

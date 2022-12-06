@@ -28,9 +28,8 @@ export function isBigBlock(item: unknown): item is BigBlock {
 
 export interface BlockA extends AstNode {
     readonly $container: BigBlock;
-    name: string
-    param: string
     props: Array<Property>
+    special: SpecialProp
 }
 
 export const BlockA = 'BlockA';
@@ -41,9 +40,8 @@ export function isBlockA(item: unknown): item is BlockA {
 
 export interface BlockB extends AstNode {
     readonly $container: BigBlock;
-    name: string
-    param: string
     props: Array<Property>
+    special: SpecialProp
 }
 
 export const BlockB = 'BlockB';
@@ -63,12 +61,23 @@ export function isProperty(item: unknown): item is Property {
     return reflection.isInstance(item, Property);
 }
 
-export type BlocksAstType = 'BigBlock' | 'BlockA' | 'BlockB' | 'InnerBlock' | 'Property';
+export interface SpecialProp extends AstNode {
+    readonly $container: BlockA | BlockB;
+    param: string
+}
+
+export const SpecialProp = 'SpecialProp';
+
+export function isSpecialProp(item: unknown): item is SpecialProp {
+    return reflection.isInstance(item, SpecialProp);
+}
+
+export type BlocksAstType = 'BigBlock' | 'BlockA' | 'BlockB' | 'InnerBlock' | 'Property' | 'SpecialProp';
 
 export class BlocksAstReflection implements AstReflection {
 
     getAllTypes(): string[] {
-        return ['BigBlock', 'BlockA', 'BlockB', 'InnerBlock', 'Property'];
+        return ['BigBlock', 'BlockA', 'BlockB', 'InnerBlock', 'Property', 'SpecialProp'];
     }
 
     isInstance(node: unknown, type: string): boolean {

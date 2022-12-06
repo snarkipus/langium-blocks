@@ -11,17 +11,21 @@ InnerBlock:
 ;
 
 BlockA:
-    name=BlockHeaderA
-    'EndCommentTokenA' param=ID
+    BlockHeaderA
+    special=SpecialProp
     props+=Property*
     'EndBlockA'
 ;
 
 BlockB:
-    name=BlockHeaderB
-    'EndCommentTokenB' param=ID
+    BlockHeaderB
+    special=SpecialProp
     props+=Property*
     'EndBlockB'
+;
+
+SpecialProp:
+    'SpecialProp' param=ID
 ;
 
 Property:
@@ -29,8 +33,8 @@ Property:
 ;
 
 hidden terminal WS: /\s+/;
-terminal BlockHeaderA: /(BlockA)([\s\S]*?)(?=(EndCommentTokenA))/;
-terminal BlockHeaderB: /(BlockB)([\s\S]*?)(?=(EndCommentTokenB))/;
+terminal BlockHeaderA: /(BlockA)([\s\S]*?)(?=(SpecialProp))/;
+terminal BlockHeaderB: /(BlockB)([\s\S]*?)(?=(SpecialProp))/;
 terminal ID: /[_a-zA-Z][\w_]*/;
 terminal INT returns number: /[0-9]+/;
 terminal STRING: /"[^"]*"|'[^']*'/;
