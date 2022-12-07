@@ -67,8 +67,13 @@ export const BlocksGrammar = (): Grammar => loadedBlocksGrammar ?? (loadedBlocks
         "$type": "Group",
         "elements": [
           {
-            "$type": "Keyword",
-            "value": "UAN-DEFINITION"
+            "$type": "Assignment",
+            "feature": "name",
+            "operator": "=",
+            "terminal": {
+              "$type": "Keyword",
+              "value": "UAN-DEFINITION"
+            }
           },
           {
             "$type": "Assignment",
@@ -117,8 +122,13 @@ export const BlocksGrammar = (): Grammar => loadedBlocksGrammar ?? (loadedBlocks
                 }
               },
               {
-                "$type": "Keyword",
-                "value": "TOOLS"
+                "$type": "Assignment",
+                "feature": "name",
+                "operator": "=",
+                "terminal": {
+                  "$type": "Keyword",
+                  "value": "TOOLS"
+                }
               },
               {
                 "$type": "Assignment",
@@ -146,8 +156,13 @@ export const BlocksGrammar = (): Grammar => loadedBlocksGrammar ?? (loadedBlocks
                 }
               },
               {
-                "$type": "Keyword",
-                "value": "BOOKS"
+                "$type": "Assignment",
+                "feature": "name",
+                "operator": "=",
+                "terminal": {
+                  "$type": "Keyword",
+                  "value": "BOOKS"
+                }
               },
               {
                 "$type": "Assignment",
@@ -175,8 +190,13 @@ export const BlocksGrammar = (): Grammar => loadedBlocksGrammar ?? (loadedBlocks
                 }
               },
               {
-                "$type": "Keyword",
-                "value": "CARDS"
+                "$type": "Assignment",
+                "feature": "name",
+                "operator": "=",
+                "terminal": {
+                  "$type": "Keyword",
+                  "value": "CARDS"
+                }
               },
               {
                 "$type": "Assignment",
@@ -227,11 +247,16 @@ export const BlocksGrammar = (): Grammar => loadedBlocksGrammar ?? (loadedBlocks
         "$type": "Group",
         "elements": [
           {
-            "$type": "RuleCall",
-            "rule": {
-              "$refText": "SDBBlockHeader"
-            },
-            "arguments": []
+            "$type": "Assignment",
+            "feature": "name",
+            "operator": "=",
+            "terminal": {
+              "$type": "RuleCall",
+              "rule": {
+                "$refText": "SDBBlockHeader"
+              },
+              "arguments": []
+            }
           },
           {
             "$type": "Keyword",
@@ -286,8 +311,13 @@ export const BlocksGrammar = (): Grammar => loadedBlocksGrammar ?? (loadedBlocks
         "$type": "Group",
         "elements": [
           {
-            "$type": "Keyword",
-            "value": "TOOL-USAGE:"
+            "$type": "Assignment",
+            "feature": "name",
+            "operator": "=",
+            "terminal": {
+              "$type": "Keyword",
+              "value": "TOOL-USAGE:"
+            }
           },
           {
             "$type": "Assignment",
@@ -377,7 +407,7 @@ export const BlocksGrammar = (): Grammar => loadedBlocksGrammar ?? (loadedBlocks
           },
           {
             "$type": "Assignment",
-            "feature": "value",
+            "feature": "name",
             "operator": "=",
             "terminal": {
               "$type": "RuleCall",

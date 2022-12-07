@@ -18,6 +18,7 @@ export type UANItem = string;
 
 export interface Books extends AstNode {
     items: Array<UANItem>
+    name: 'BOOKS'
 }
 
 export const Books = 'Books';
@@ -28,6 +29,7 @@ export function isBooks(item: unknown): item is Books {
 
 export interface Cards extends AstNode {
     items: Array<UANItem>
+    name: 'CARDS'
 }
 
 export const Cards = 'Cards';
@@ -48,7 +50,7 @@ export function isExecuteBlock(item: unknown): item is ExecuteBlock {
 }
 
 export interface Property extends AstNode {
-    value: string
+    name: string
 }
 
 export const Property = 'Property';
@@ -59,6 +61,7 @@ export function isProperty(item: unknown): item is Property {
 
 export interface SDBBlock extends AstNode {
     readonly $container: ExecuteBlock;
+    name: string
     seed: number
     toolUsage?: ToolUsageBlock
 }
@@ -71,6 +74,7 @@ export function isSDBBlock(item: unknown): item is SDBBlock {
 
 export interface Tools extends AstNode {
     items: Array<UANItem>
+    name: 'TOOLS'
 }
 
 export const Tools = 'Tools';
@@ -93,6 +97,7 @@ export function isToolUsage(item: unknown): item is ToolUsage {
 
 export interface ToolUsageBlock extends AstNode {
     readonly $container: SDBBlock;
+    name: 'TOOL-USAGE:'
     tools: Array<ToolUsage>
 }
 
@@ -105,6 +110,7 @@ export function isToolUsageBlock(item: unknown): item is ToolUsageBlock {
 export interface UANBlock extends AstNode {
     readonly $container: ExecuteBlock;
     categories: Array<UANCategory>
+    name: 'UAN-DEFINITION'
 }
 
 export const UANBlock = 'UANBlock';

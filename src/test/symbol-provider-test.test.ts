@@ -1,22 +1,8 @@
-import {
-  BlocksServices,
-  createBlocksServices,
-} from "../language-server/blocks-module";
-import {
-  AstNode,
-  EmptyFileSystem,
-  LangiumDocument,
-  LangiumServices,
-} from "langium";
+import { BlocksServices, createBlocksServices } from "../language-server/blocks-module";
+import { AstNode, EmptyFileSystem, LangiumDocument, LangiumServices }  from "langium";
 import { parseHelper } from "langium/test";
-import {
-  DocumentSymbol,
-  SymbolKind,
-  TextDocumentIdentifier,
-  // SymbolKind,
-} from "vscode-languageserver";
+import { DocumentSymbol, SymbolKind, TextDocumentIdentifier } from "vscode-languageserver";
 import { ExecuteBlock } from "../language-server/generated/ast";
-// import { BigBlock } from "../language-server/generated/ast";
 
 function textDocumentParams(document: LangiumDocument): {
   textDocument: TextDocumentIdentifier;
@@ -83,39 +69,23 @@ describe("Document Symbol Provider", () => {
   });
 
   beforeEach(async () => {
-    result = await symbolizer(text); //? result.document
-    console.log(result.document);
+    result = await symbolizer(text);
   });
 
-  it('generates the correct symbols for BigBlock', async () => {
-    // BigBlock => Class Symbol
-    expect(result.symbols?.[0].kind).toEqual(SymbolKind.Class);
+
+  it('generates the correct symbols for UAN and SDB Blocks', async () => {
+    // UAN-DEFINITION => Field Symbol: UAN
+    // SDB            => Field Symbol: SDB
+    expect(result.symbols?.map((blocks) => blocks.kind)).toEqual([SymbolKind.Field,SymbolKind.Field]);
   });
 
-  // it.only('generates the correct symbols for Blocks', async () => {
-  //   // BlockA => Field Symbol
-  //   // BlockB => Field Symbol
-  //   expect(result.symbols?.[0]
-  //           .children?.map(blocks => {
-  //             blocks.kind
-  //           })
-  //         ).toEqual([SymbolKind.Field,SymbolKind.Field]);
-  // });
-
-  // it('generates the correct symbols for BigBlock', async () => {
-  //   // propA => Method Symbol
-  //   // propB => Method Symbol
-  //   // propC => Method Symbol
-  //   // propD => Method Symbol
-  //   expect(result.symbols?.[0]
-  //           .children?.map(blocks => {
-  //             blocks.children?.map(properties => {
-  //               properties.kind
-  //             })
-  //           })
-  //         ).toEqual([
-  //           [SymbolKind.Method,SymbolKind.Method],
-  //           [SymbolKind.Method,SymbolKind.Method]
-  //         ]);
-  // });
+  it('generates the correct symbols for Category Blocks', async () => {
+    // TOOLS        => Class Symbol
+    // BOOKS        => Class Symbol
+    // CARDS        => Class Symbol
+    // TOOLS-USAGE: => Class Symbol
+    expect(result.symbols?.flatMap((blocks) => blocks.children?.map((category) => category.kind)))
+      .toEqual([SymbolKind.Class,SymbolKind.Class,SymbolKind.Class,SymbolKind.Class]);
+  });
 });
+

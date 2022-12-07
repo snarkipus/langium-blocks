@@ -1,6 +1,7 @@
 import { AstNode, CstNode, DefaultDocumentSymbolProvider, LangiumDocument } from "langium";
 import { DocumentSymbol, SymbolKind } from "vscode-languageserver";
 import { BlocksServices } from "./blocks-module";
+import { isSDBBlock, isUANBlock } from "./generated/ast";
 
 export class BlocksDocumentSymbolProvider extends DefaultDocumentSymbolProvider {
 
@@ -9,8 +10,8 @@ export class BlocksDocumentSymbolProvider extends DefaultDocumentSymbolProvider 
     }
 
     protected override getSymbol(document: LangiumDocument, astNode: AstNode): DocumentSymbol[] {
-        const node = astNode.$cstNode;//? 
-        const nameNode = this.nameProvider.getNameNode(astNode);//?
+        const node = astNode.$cstNode; 
+        const nameNode = this.nameProvider.getNameNode(astNode);
         if (nameNode && node) {
             return [{
                 kind: this.getSymbolKind(astNode.$type ?? SymbolKind.Field),
@@ -24,10 +25,11 @@ export class BlocksDocumentSymbolProvider extends DefaultDocumentSymbolProvider 
         }
     }
 
-    protected getSymbolKind(type: string): SymbolKind {
+    protected override getSymbolKind(type: string): SymbolKind {
         switch(type) {
             case 'UANBlock':
             case 'SDBBlock':    return SymbolKind.Field;
+            case 'ToolUsageBlock':
             case 'Tools':
             case 'Books':
             case 'Cards':       return SymbolKind.Class;
@@ -37,6 +39,11 @@ export class BlocksDocumentSymbolProvider extends DefaultDocumentSymbolProvider 
     }
 
     protected nameText(node: AstNode, nameNode: CstNode): string {
+        if ( isSDBBlock(node) ) {
+            return 'SDB';
+        } else if ( isUANBlock(node) ) {
+            return 'UAN';
+        }
         let name = this.nameProvider.getName(node);
         return name ?? nameNode.text;
     }

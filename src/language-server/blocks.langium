@@ -8,15 +8,15 @@ entry ExecuteBlock:
 ;
 
 UANBlock:
-    'UAN-DEFINITION'
+    name='UAN-DEFINITION'
     categories+=UANCategory+
     'END' 'UAN'
 ;
 
 UANCategory:
-      {infer Tools} 'TOOLS' items+=UANItem+
-    | {infer Books} 'BOOKS' items+=UANItem+
-    | {infer Cards} 'CARDS' items+=UANItem+
+      {infer Tools} name='TOOLS' items+=UANItem+
+    | {infer Books} name='BOOKS' items+=UANItem+
+    | {infer Cards} name='CARDS' items+=UANItem+
 ;
 
 UANItem returns string:
@@ -24,14 +24,14 @@ UANItem returns string:
 ;
 
 SDBBlock:
-    SDBBlockHeader
+    name=SDBBlockHeader
     'RANDOM-NUMBER-SEED:' seed=INT
     toolUsage=ToolUsageBlock?
     'END' 'SCENARIO'
 ;
 
 ToolUsageBlock:
-    'TOOL-USAGE:'
+    name='TOOL-USAGE:'
     tools+=ToolUsage+
 ;
 
@@ -40,7 +40,7 @@ ToolUsage:
 ;
 
 Property:
-    'Property' value=ID
+    'Property' name=ID
 ;
 
 hidden terminal WS: /\s+/;
