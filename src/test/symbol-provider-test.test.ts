@@ -11,6 +11,7 @@ import {
 import { parseHelper } from "langium/test";
 import {
   DocumentSymbol,
+  SymbolKind,
   TextDocumentIdentifier,
   // SymbolKind,
 } from "vscode-languageserver";
@@ -72,9 +73,9 @@ describe("Document Symbol Provider", () => {
       comment text line 1
       comment text line 2
       comment text line n
-      SpecialProp anotherName
-      Property propC
-      Property propD
+      RANDOM-NUMBER-SEED: 12345
+      TOOL-USAGE:
+        DESC: hammer QTY 2      
     END SCENARIO
     
   END-INSTRUCTIONS
@@ -86,10 +87,10 @@ describe("Document Symbol Provider", () => {
     console.log(result.document);
   });
 
-  // it('generates the correct symbols for BigBlock', async () => {
-  //   // BigBlock => Class Symbol
-  //   expect(result.symbols?.[0].kind).toEqual(SymbolKind.Class);
-  // });
+  it('generates the correct symbols for BigBlock', async () => {
+    // BigBlock => Class Symbol
+    expect(result.symbols?.[0].kind).toEqual(SymbolKind.Class);
+  });
 
   // it.only('generates the correct symbols for Blocks', async () => {
   //   // BlockA => Field Symbol

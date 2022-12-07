@@ -28,7 +28,6 @@ export class BlocksDocumentSymbolProvider extends DefaultDocumentSymbolProvider 
         switch(type) {
             case 'UANBlock':
             case 'SDBBlock':    return SymbolKind.Field;
-            // case 'UANCategory': return SymbolKind.Property;
             case 'Tools':
             case 'Books':
             case 'Cards':       return SymbolKind.Class;

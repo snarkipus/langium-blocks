@@ -17,8 +17,8 @@ EXECUTE
     comment text line 2
     comment text line n
     RANDOM-NUMBER-SEED: 12345
-    Property propC
-    Property propD
+    TOOL-USAGE:
+      DESC: hammer QTY 2      
   END SCENARIO
   
 END-INSTRUCTIONS

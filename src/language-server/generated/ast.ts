@@ -4,7 +4,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
-import { AstNode, AbstractAstReflection, ReferenceInfo, TypeMetaData } from 'langium';
+import { AstNode, AbstractAstReflection, Reference, ReferenceInfo, TypeMetaData } from 'langium';
 
 export type UANCategory = Books | Cards | Tools;
 
@@ -13,6 +13,8 @@ export const UANCategory = 'UANCategory';
 export function isUANCategory(item: unknown): item is UANCategory {
     return reflection.isInstance(item, UANCategory);
 }
+
+export type UANItem = string;
 
 export interface Books extends AstNode {
     items: Array<UANItem>
@@ -46,7 +48,6 @@ export function isExecuteBlock(item: unknown): item is ExecuteBlock {
 }
 
 export interface Property extends AstNode {
-    readonly $container: SDBBlock;
     value: string
 }
 
@@ -58,25 +59,14 @@ export function isProperty(item: unknown): item is Property {
 
 export interface SDBBlock extends AstNode {
     readonly $container: ExecuteBlock;
-    props: Array<Property>
-    special: SpecialProp
+    seed: number
+    toolUsage?: ToolUsageBlock
 }
 
 export const SDBBlock = 'SDBBlock';
 
 export function isSDBBlock(item: unknown): item is SDBBlock {
     return reflection.isInstance(item, SDBBlock);
-}
-
-export interface SpecialProp extends AstNode {
-    readonly $container: SDBBlock;
-    seed: number
-}
-
-export const SpecialProp = 'SpecialProp';
-
-export function isSpecialProp(item: unknown): item is SpecialProp {
-    return reflection.isInstance(item, SpecialProp);
 }
 
 export interface Tools extends AstNode {
@@ -87,6 +77,29 @@ export const Tools = 'Tools';
 
 export function isTools(item: unknown): item is Tools {
     return reflection.isInstance(item, Tools);
+}
+
+export interface ToolUsage extends AstNode {
+    readonly $container: ToolUsageBlock;
+    qty: number
+    tool: Reference<Tools>
+}
+
+export const ToolUsage = 'ToolUsage';
+
+export function isToolUsage(item: unknown): item is ToolUsage {
+    return reflection.isInstance(item, ToolUsage);
+}
+
+export interface ToolUsageBlock extends AstNode {
+    readonly $container: SDBBlock;
+    tools: Array<ToolUsage>
+}
+
+export const ToolUsageBlock = 'ToolUsageBlock';
+
+export function isToolUsageBlock(item: unknown): item is ToolUsageBlock {
+    return reflection.isInstance(item, ToolUsageBlock);
 }
 
 export interface UANBlock extends AstNode {
@@ -100,34 +113,23 @@ export function isUANBlock(item: unknown): item is UANBlock {
     return reflection.isInstance(item, UANBlock);
 }
 
-export interface UANItem extends AstNode {
-    readonly $container: Books | Cards | Tools;
-    name: string
-}
-
-export const UANItem = 'UANItem';
-
-export function isUANItem(item: unknown): item is UANItem {
-    return reflection.isInstance(item, UANItem);
-}
-
 export interface BlocksAstType {
     Books: Books
     Cards: Cards
     ExecuteBlock: ExecuteBlock
     Property: Property
     SDBBlock: SDBBlock
-    SpecialProp: SpecialProp
+    ToolUsage: ToolUsage
+    ToolUsageBlock: ToolUsageBlock
     Tools: Tools
     UANBlock: UANBlock
     UANCategory: UANCategory
-    UANItem: UANItem
 }
 
 export class BlocksAstReflection extends AbstractAstReflection {
 
     getAllTypes(): string[] {
-        return ['Books', 'Cards', 'ExecuteBlock', 'Property', 'SDBBlock', 'SpecialProp', 'Tools', 'UANBlock', 'UANCategory', 'UANItem'];
+        return ['Books', 'Cards', 'ExecuteBlock', 'Property', 'SDBBlock', 'ToolUsage', 'ToolUsageBlock', 'Tools', 'UANBlock', 'UANCategory'];
     }
 
     protected override computeIsSubtype(subtype: string, supertype: string): boolean {
@@ -146,6 +148,9 @@ export class BlocksAstReflection extends AbstractAstReflection {
     getReferenceType(refInfo: ReferenceInfo): string {
         const referenceId = `${refInfo.container.$type}:${refInfo.property}`;
         switch (referenceId) {
+            case 'ToolUsage:tool': {
+                return Tools;
+            }
             default: {
                 throw new Error(`${referenceId} is not a valid reference id.`);
             }
@@ -170,19 +175,19 @@ export class BlocksAstReflection extends AbstractAstReflection {
                     ]
                 };
             }
-            case 'SDBBlock': {
-                return {
-                    name: 'SDBBlock',
-                    mandatory: [
-                        { name: 'props', type: 'array' }
-                    ]
-                };
-            }
             case 'Tools': {
                 return {
                     name: 'Tools',
                     mandatory: [
                         { name: 'items', type: 'array' }
+                    ]
+                };
+            }
+            case 'ToolUsageBlock': {
+                return {
+                    name: 'ToolUsageBlock',
+                    mandatory: [
+                        { name: 'tools', type: 'array' }
                     ]
                 };
             }

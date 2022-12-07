@@ -10,7 +10,7 @@
     },
     {
       "name": "keyword.control.blocks",
-      "match": "\\b(UAN-DEFINITION)\\b|\\b(END-INSTRUCTIONS)\\b|\\b(BOOKS|CARDS|END|EXECUTE|Property|SCENARIO|TOOLS|UAN|SDB)\\b|\\b(RANDOM-NUMBER-SEED:)\\B"
+      "match": "\\b(BOOKS|CARDS|END|END-INSTRUCTIONS|EXECUTE|QTY|SCENARIO|TOOLS|UAN|UAN-DEFINITION)\\b|\\b(DESC:|RANDOM-NUMBER-SEED:|TOOL-USAGE:)\\B"
     },
     {
       "name": "string.quoted.double.blocks",

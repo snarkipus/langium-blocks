@@ -205,17 +205,13 @@ export const BlocksGrammar = (): Grammar => loadedBlocksGrammar ?? (loadedBlocks
     {
       "$type": "ParserRule",
       "name": "UANItem",
+      "dataType": "string",
       "definition": {
-        "$type": "Assignment",
-        "feature": "name",
-        "operator": "=",
-        "terminal": {
-          "$type": "RuleCall",
-          "rule": {
-            "$refText": "ID"
-          },
-          "arguments": []
-        }
+        "$type": "RuleCall",
+        "rule": {
+          "$refText": "ID"
+        },
+        "arguments": []
       },
       "definesHiddenTokens": false,
       "entry": false,
@@ -238,29 +234,33 @@ export const BlocksGrammar = (): Grammar => loadedBlocksGrammar ?? (loadedBlocks
             "arguments": []
           },
           {
+            "$type": "Keyword",
+            "value": "RANDOM-NUMBER-SEED:"
+          },
+          {
             "$type": "Assignment",
-            "feature": "special",
+            "feature": "seed",
             "operator": "=",
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$refText": "SpecialProp"
+                "$refText": "INT"
               },
               "arguments": []
             }
           },
           {
             "$type": "Assignment",
-            "feature": "props",
-            "operator": "+=",
+            "feature": "toolUsage",
+            "operator": "=",
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$refText": "Property"
+                "$refText": "ToolUsageBlock"
               },
               "arguments": []
             },
-            "cardinality": "*"
+            "cardinality": "?"
           },
           {
             "$type": "Keyword",
@@ -281,17 +281,72 @@ export const BlocksGrammar = (): Grammar => loadedBlocksGrammar ?? (loadedBlocks
     },
     {
       "$type": "ParserRule",
-      "name": "SpecialProp",
+      "name": "ToolUsageBlock",
       "definition": {
         "$type": "Group",
         "elements": [
           {
             "$type": "Keyword",
-            "value": "RANDOM-NUMBER-SEED:"
+            "value": "TOOL-USAGE:"
           },
           {
             "$type": "Assignment",
-            "feature": "seed",
+            "feature": "tools",
+            "operator": "+=",
+            "terminal": {
+              "$type": "RuleCall",
+              "rule": {
+                "$refText": "ToolUsage"
+              },
+              "arguments": []
+            },
+            "cardinality": "+"
+          }
+        ]
+      },
+      "definesHiddenTokens": false,
+      "entry": false,
+      "fragment": false,
+      "hiddenTokens": [],
+      "parameters": [],
+      "wildcard": false
+    },
+    {
+      "$type": "ParserRule",
+      "name": "ToolUsage",
+      "definition": {
+        "$type": "Group",
+        "elements": [
+          {
+            "$type": "Keyword",
+            "value": "DESC:"
+          },
+          {
+            "$type": "Assignment",
+            "feature": "tool",
+            "operator": "=",
+            "terminal": {
+              "$type": "CrossReference",
+              "type": {
+                "$refText": "Tools"
+              },
+              "terminal": {
+                "$type": "RuleCall",
+                "rule": {
+                  "$refText": "UANItem"
+                },
+                "arguments": []
+              },
+              "deprecatedSyntax": false
+            }
+          },
+          {
+            "$type": "Keyword",
+            "value": "QTY"
+          },
+          {
+            "$type": "Assignment",
+            "feature": "qty",
             "operator": "=",
             "terminal": {
               "$type": "RuleCall",

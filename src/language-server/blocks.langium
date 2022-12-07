@@ -19,19 +19,24 @@ UANCategory:
     | {infer Cards} 'CARDS' items+=UANItem+
 ;
 
-UANItem:
-    name=ID
+UANItem returns string:
+    ID
 ;
 
 SDBBlock:
     SDBBlockHeader
-    special=SpecialProp
-    props+=Property*
+    'RANDOM-NUMBER-SEED:' seed=INT
+    toolUsage=ToolUsageBlock?
     'END' 'SCENARIO'
 ;
 
-SpecialProp:
-    'RANDOM-NUMBER-SEED:' seed=INT
+ToolUsageBlock:
+    'TOOL-USAGE:'
+    tools+=ToolUsage+
+;
+
+ToolUsage:
+    'DESC:' tool=[Tools:UANItem] 'QTY' qty=INT
 ;
 
 Property:
