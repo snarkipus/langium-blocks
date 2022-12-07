@@ -3,56 +3,51 @@
  * DO NOT EDIT MANUALLY!
  ******************************************************************************/
 
-/* eslint-disable @typescript-eslint/array-type */
-/* eslint-disable @typescript-eslint/no-empty-interface */
-import { AstNode, AstReflection, ReferenceInfo, isAstNode, TypeMetaData } from 'langium';
+/* eslint-disable */
+import { AstNode, AbstractAstReflection, ReferenceInfo, TypeMetaData } from 'langium';
 
-export type InnerBlock = BlockA | BlockB;
+export type UANCategory = Books | Cards | Tools;
 
-export const InnerBlock = 'InnerBlock';
+export const UANCategory = 'UANCategory';
 
-export function isInnerBlock(item: unknown): item is InnerBlock {
-    return reflection.isInstance(item, InnerBlock);
+export function isUANCategory(item: unknown): item is UANCategory {
+    return reflection.isInstance(item, UANCategory);
 }
 
-export interface BigBlock extends AstNode {
-    innerBlocks: Array<InnerBlock>
-    name: 'BigBlock'
+export interface Books extends AstNode {
+    items: Array<UANItem>
 }
 
-export const BigBlock = 'BigBlock';
+export const Books = 'Books';
 
-export function isBigBlock(item: unknown): item is BigBlock {
-    return reflection.isInstance(item, BigBlock);
+export function isBooks(item: unknown): item is Books {
+    return reflection.isInstance(item, Books);
 }
 
-export interface BlockA extends AstNode {
-    readonly $container: BigBlock;
-    props: Array<Property>
-    special: SpecialProp
+export interface Cards extends AstNode {
+    items: Array<UANItem>
 }
 
-export const BlockA = 'BlockA';
+export const Cards = 'Cards';
 
-export function isBlockA(item: unknown): item is BlockA {
-    return reflection.isInstance(item, BlockA);
+export function isCards(item: unknown): item is Cards {
+    return reflection.isInstance(item, Cards);
 }
 
-export interface BlockB extends AstNode {
-    readonly $container: BigBlock;
-    props: Array<Property>
-    special: SpecialProp
+export interface ExecuteBlock extends AstNode {
+    sdb?: SDBBlock
+    uan?: UANBlock
 }
 
-export const BlockB = 'BlockB';
+export const ExecuteBlock = 'ExecuteBlock';
 
-export function isBlockB(item: unknown): item is BlockB {
-    return reflection.isInstance(item, BlockB);
+export function isExecuteBlock(item: unknown): item is ExecuteBlock {
+    return reflection.isInstance(item, ExecuteBlock);
 }
 
 export interface Property extends AstNode {
-    readonly $container: BlockA | BlockB;
-    name: string
+    readonly $container: SDBBlock;
+    value: string
 }
 
 export const Property = 'Property';
@@ -61,9 +56,21 @@ export function isProperty(item: unknown): item is Property {
     return reflection.isInstance(item, Property);
 }
 
+export interface SDBBlock extends AstNode {
+    readonly $container: ExecuteBlock;
+    props: Array<Property>
+    special: SpecialProp
+}
+
+export const SDBBlock = 'SDBBlock';
+
+export function isSDBBlock(item: unknown): item is SDBBlock {
+    return reflection.isInstance(item, SDBBlock);
+}
+
 export interface SpecialProp extends AstNode {
-    readonly $container: BlockA | BlockB;
-    param: string
+    readonly $container: SDBBlock;
+    seed: number
 }
 
 export const SpecialProp = 'SpecialProp';
@@ -72,26 +79,63 @@ export function isSpecialProp(item: unknown): item is SpecialProp {
     return reflection.isInstance(item, SpecialProp);
 }
 
-export type BlocksAstType = 'BigBlock' | 'BlockA' | 'BlockB' | 'InnerBlock' | 'Property' | 'SpecialProp';
+export interface Tools extends AstNode {
+    items: Array<UANItem>
+}
 
-export class BlocksAstReflection implements AstReflection {
+export const Tools = 'Tools';
+
+export function isTools(item: unknown): item is Tools {
+    return reflection.isInstance(item, Tools);
+}
+
+export interface UANBlock extends AstNode {
+    readonly $container: ExecuteBlock;
+    categories: Array<UANCategory>
+}
+
+export const UANBlock = 'UANBlock';
+
+export function isUANBlock(item: unknown): item is UANBlock {
+    return reflection.isInstance(item, UANBlock);
+}
+
+export interface UANItem extends AstNode {
+    readonly $container: Books | Cards | Tools;
+    name: string
+}
+
+export const UANItem = 'UANItem';
+
+export function isUANItem(item: unknown): item is UANItem {
+    return reflection.isInstance(item, UANItem);
+}
+
+export interface BlocksAstType {
+    Books: Books
+    Cards: Cards
+    ExecuteBlock: ExecuteBlock
+    Property: Property
+    SDBBlock: SDBBlock
+    SpecialProp: SpecialProp
+    Tools: Tools
+    UANBlock: UANBlock
+    UANCategory: UANCategory
+    UANItem: UANItem
+}
+
+export class BlocksAstReflection extends AbstractAstReflection {
 
     getAllTypes(): string[] {
-        return ['BigBlock', 'BlockA', 'BlockB', 'InnerBlock', 'Property', 'SpecialProp'];
+        return ['Books', 'Cards', 'ExecuteBlock', 'Property', 'SDBBlock', 'SpecialProp', 'Tools', 'UANBlock', 'UANCategory', 'UANItem'];
     }
 
-    isInstance(node: unknown, type: string): boolean {
-        return isAstNode(node) && this.isSubtype(node.$type, type);
-    }
-
-    isSubtype(subtype: string, supertype: string): boolean {
-        if (subtype === supertype) {
-            return true;
-        }
+    protected override computeIsSubtype(subtype: string, supertype: string): boolean {
         switch (subtype) {
-            case BlockA:
-            case BlockB: {
-                return this.isSubtype(InnerBlock, supertype);
+            case Books:
+            case Cards:
+            case Tools: {
+                return this.isSubtype(UANCategory, supertype);
             }
             default: {
                 return false;
@@ -110,27 +154,43 @@ export class BlocksAstReflection implements AstReflection {
 
     getTypeMetaData(type: string): TypeMetaData {
         switch (type) {
-            case 'BigBlock': {
+            case 'Books': {
                 return {
-                    name: 'BigBlock',
+                    name: 'Books',
                     mandatory: [
-                        { name: 'innerBlocks', type: 'array' }
+                        { name: 'items', type: 'array' }
                     ]
                 };
             }
-            case 'BlockA': {
+            case 'Cards': {
                 return {
-                    name: 'BlockA',
+                    name: 'Cards',
+                    mandatory: [
+                        { name: 'items', type: 'array' }
+                    ]
+                };
+            }
+            case 'SDBBlock': {
+                return {
+                    name: 'SDBBlock',
                     mandatory: [
                         { name: 'props', type: 'array' }
                     ]
                 };
             }
-            case 'BlockB': {
+            case 'Tools': {
                 return {
-                    name: 'BlockB',
+                    name: 'Tools',
                     mandatory: [
-                        { name: 'props', type: 'array' }
+                        { name: 'items', type: 'array' }
+                    ]
+                };
+            }
+            case 'UANBlock': {
+                return {
+                    name: 'UANBlock',
+                    mandatory: [
+                        { name: 'categories', type: 'array' }
                     ]
                 };
             }

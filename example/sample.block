@@ -1,0 +1,24 @@
+EXECUTE
+
+  UAN-DEFINITION
+    TOOLS
+      hammer
+      screwdriver
+    BOOKS
+      book1
+      book2
+    CARDS
+      ace
+      queen
+  END UAN
+
+  SDB
+    comment text line 1
+    comment text line 2
+    comment text line n
+    RANDOM-NUMBER-SEED: 12345
+    Property propC
+    Property propD
+  END SCENARIO
+  
+END-INSTRUCTIONS

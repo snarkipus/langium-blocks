@@ -13,36 +13,44 @@ export const BlocksGrammar = (): Grammar => loadedBlocksGrammar ?? (loadedBlocks
   "rules": [
     {
       "$type": "ParserRule",
-      "name": "BigBlock",
+      "name": "ExecuteBlock",
       "entry": true,
       "definition": {
         "$type": "Group",
         "elements": [
           {
-            "$type": "Assignment",
-            "feature": "name",
-            "operator": "=",
-            "terminal": {
-              "$type": "Keyword",
-              "value": "BigBlock"
-            }
+            "$type": "Keyword",
+            "value": "EXECUTE"
           },
           {
             "$type": "Assignment",
-            "feature": "innerBlocks",
-            "operator": "+=",
+            "feature": "uan",
+            "operator": "=",
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$refText": "InnerBlock"
+                "$refText": "UANBlock"
               },
               "arguments": []
             },
-            "cardinality": "+"
+            "cardinality": "?"
+          },
+          {
+            "$type": "Assignment",
+            "feature": "sdb",
+            "operator": "=",
+            "terminal": {
+              "$type": "RuleCall",
+              "rule": {
+                "$refText": "SDBBlock"
+              },
+              "arguments": []
+            },
+            "cardinality": "?"
           },
           {
             "$type": "Keyword",
-            "value": "EndBigBlock"
+            "value": "END-INSTRUCTIONS"
           }
         ]
       },
@@ -54,25 +62,136 @@ export const BlocksGrammar = (): Grammar => loadedBlocksGrammar ?? (loadedBlocks
     },
     {
       "$type": "ParserRule",
-      "name": "InnerBlock",
+      "name": "UANBlock",
+      "definition": {
+        "$type": "Group",
+        "elements": [
+          {
+            "$type": "Keyword",
+            "value": "UAN-DEFINITION"
+          },
+          {
+            "$type": "Assignment",
+            "feature": "categories",
+            "operator": "+=",
+            "terminal": {
+              "$type": "RuleCall",
+              "rule": {
+                "$refText": "UANCategory"
+              },
+              "arguments": []
+            },
+            "cardinality": "+"
+          },
+          {
+            "$type": "Keyword",
+            "value": "END"
+          },
+          {
+            "$type": "Keyword",
+            "value": "UAN"
+          }
+        ]
+      },
+      "definesHiddenTokens": false,
+      "entry": false,
+      "fragment": false,
+      "hiddenTokens": [],
+      "parameters": [],
+      "wildcard": false
+    },
+    {
+      "$type": "ParserRule",
+      "name": "UANCategory",
       "definition": {
         "$type": "Alternatives",
         "elements": [
           {
-            "$type": "RuleCall",
-            "rule": {
-              "$refText": "BlockA"
-            },
-            "arguments": [],
-            "cardinality": "+"
+            "$type": "Group",
+            "elements": [
+              {
+                "$type": "Action",
+                "inferredType": {
+                  "$type": "InferredType",
+                  "name": "Tools"
+                }
+              },
+              {
+                "$type": "Keyword",
+                "value": "TOOLS"
+              },
+              {
+                "$type": "Assignment",
+                "feature": "items",
+                "operator": "+=",
+                "terminal": {
+                  "$type": "RuleCall",
+                  "rule": {
+                    "$refText": "UANItem"
+                  },
+                  "arguments": []
+                },
+                "cardinality": "+"
+              }
+            ]
           },
           {
-            "$type": "RuleCall",
-            "rule": {
-              "$refText": "BlockB"
-            },
-            "arguments": [],
-            "cardinality": "+"
+            "$type": "Group",
+            "elements": [
+              {
+                "$type": "Action",
+                "inferredType": {
+                  "$type": "InferredType",
+                  "name": "Books"
+                }
+              },
+              {
+                "$type": "Keyword",
+                "value": "BOOKS"
+              },
+              {
+                "$type": "Assignment",
+                "feature": "items",
+                "operator": "+=",
+                "terminal": {
+                  "$type": "RuleCall",
+                  "rule": {
+                    "$refText": "UANItem"
+                  },
+                  "arguments": []
+                },
+                "cardinality": "+"
+              }
+            ]
+          },
+          {
+            "$type": "Group",
+            "elements": [
+              {
+                "$type": "Action",
+                "inferredType": {
+                  "$type": "InferredType",
+                  "name": "Cards"
+                }
+              },
+              {
+                "$type": "Keyword",
+                "value": "CARDS"
+              },
+              {
+                "$type": "Assignment",
+                "feature": "items",
+                "operator": "+=",
+                "terminal": {
+                  "$type": "RuleCall",
+                  "rule": {
+                    "$refText": "UANItem"
+                  },
+                  "arguments": []
+                },
+                "cardinality": "+"
+              }
+            ]
           }
         ]
       },
@@ -85,14 +204,36 @@ export const BlocksGrammar = (): Grammar => loadedBlocksGrammar ?? (loadedBlocks
     },
     {
       "$type": "ParserRule",
-      "name": "BlockA",
+      "name": "UANItem",
+      "definition": {
+        "$type": "Assignment",
+        "feature": "name",
+        "operator": "=",
+        "terminal": {
+          "$type": "RuleCall",
+          "rule": {
+            "$refText": "ID"
+          },
+          "arguments": []
+        }
+      },
+      "definesHiddenTokens": false,
+      "entry": false,
+      "fragment": false,
+      "hiddenTokens": [],
+      "parameters": [],
+      "wildcard": false
+    },
+    {
+      "$type": "ParserRule",
+      "name": "SDBBlock",
       "definition": {
         "$type": "Group",
         "elements": [
           {
             "$type": "RuleCall",
             "rule": {
-              "$refText": "BlockHeaderA"
+              "$refText": "SDBBlockHeader"
             },
             "arguments": []
           },
@@ -123,58 +264,11 @@ export const BlocksGrammar = (): Grammar => loadedBlocksGrammar ?? (loadedBlocks
           },
           {
             "$type": "Keyword",
-            "value": "EndBlockA"
-          }
-        ]
-      },
-      "definesHiddenTokens": false,
-      "entry": false,
-      "fragment": false,
-      "hiddenTokens": [],
-      "parameters": [],
-      "wildcard": false
-    },
-    {
-      "$type": "ParserRule",
-      "name": "BlockB",
-      "definition": {
-        "$type": "Group",
-        "elements": [
-          {
-            "$type": "RuleCall",
-            "rule": {
-              "$refText": "BlockHeaderB"
-            },
-            "arguments": []
-          },
-          {
-            "$type": "Assignment",
-            "feature": "special",
-            "operator": "=",
-            "terminal": {
-              "$type": "RuleCall",
-              "rule": {
-                "$refText": "SpecialProp"
-              },
-              "arguments": []
-            }
-          },
-          {
-            "$type": "Assignment",
-            "feature": "props",
-            "operator": "+=",
-            "terminal": {
-              "$type": "RuleCall",
-              "rule": {
-                "$refText": "Property"
-              },
-              "arguments": []
-            },
-            "cardinality": "*"
+            "value": "END"
           },
           {
             "$type": "Keyword",
-            "value": "EndBlockB"
+            "value": "SCENARIO"
           }
         ]
       },
@@ -193,16 +287,16 @@ export const BlocksGrammar = (): Grammar => loadedBlocksGrammar ?? (loadedBlocks
         "elements": [
           {
             "$type": "Keyword",
-            "value": "SpecialProp"
+            "value": "RANDOM-NUMBER-SEED:"
           },
           {
             "$type": "Assignment",
-            "feature": "param",
+            "feature": "seed",
             "operator": "=",
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$refText": "ID"
+                "$refText": "INT"
               },
               "arguments": []
             }
@@ -228,7 +322,7 @@ export const BlocksGrammar = (): Grammar => loadedBlocksGrammar ?? (loadedBlocks
           },
           {
             "$type": "Assignment",
-            "feature": "name",
+            "feature": "value",
             "operator": "=",
             "terminal": {
               "$type": "RuleCall",
@@ -259,20 +353,10 @@ export const BlocksGrammar = (): Grammar => loadedBlocksGrammar ?? (loadedBlocks
     },
     {
       "$type": "TerminalRule",
-      "name": "BlockHeaderA",
+      "name": "SDBBlockHeader",
       "definition": {
         "$type": "RegexToken",
-        "regex": "(BlockA)([\\\\s\\\\S]*?)(?=(SpecialProp))"
-      },
-      "fragment": false,
-      "hidden": false
-    },
-    {
-      "$type": "TerminalRule",
-      "name": "BlockHeaderB",
-      "definition": {
-        "$type": "RegexToken",
-        "regex": "(BlockB)([\\\\s\\\\S]*?)(?=(SpecialProp))"
+        "regex": "(SDB)([\\\\s\\\\S]*?)(?=(RANDOM-NUMBER-SEED))"
       },
       "fragment": false,
       "hidden": false

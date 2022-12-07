@@ -5,7 +5,8 @@ import {
 import { BlocksGeneratedModule, BlocksGeneratedSharedModule } from './generated/module';
 import { BlocksValidationRegistry, BlocksValidator } from './blocks-validator';
 import { BlocksDocumentSymbolProvider } from './blocks-symbol-provider';
-import { BlocksValueConverter } from './blocks-value-converter';
+import { BlocksNameProvider } from './blocks-name-provider';
+// import { BlocksValueConverter } from './blocks-value-converter';
 
 /**
  * Declaration of custom services - add your own service classes here.
@@ -29,7 +30,7 @@ export type BlocksServices = LangiumServices & BlocksAddedServices
  */
 export const BlocksModule: Module<BlocksServices, PartialLangiumServices & BlocksAddedServices> = {
     parser: {
-        ValueConverter: () => new BlocksValueConverter(),
+        // ValueConverter: () => new BlocksValueConverter(),
     },
     validation: {
         ValidationRegistry: (services) => new BlocksValidationRegistry(services),
@@ -38,6 +39,9 @@ export const BlocksModule: Module<BlocksServices, PartialLangiumServices & Block
     lsp: {
         DocumentSymbolProvider: (services) => new BlocksDocumentSymbolProvider(services),
     },
+    references: {
+        NameProvider: () => new BlocksNameProvider()
+    }
 };
 
 /**

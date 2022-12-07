@@ -13,7 +13,7 @@ export class BlocksValueConverter extends DefaultValueConverter {
         if (!rule) {
             throw new Error('This cst node was not parsed by a rule.');
         }
-        if (rule.name.toUpperCase() === 'BLOCKHEADERA' || rule.name.toUpperCase() === 'BLOCKHEADERB') {
+        if (rule.name.toUpperCase() === 'SDBBLOCKHEADER' || rule.name.toUpperCase() === 'TDBBLOCKHEADER') {
             return convertBlockHeader(input);
         } else {
           return super.runConverter(rule, input, cstNode);
@@ -24,5 +24,5 @@ export class BlocksValueConverter extends DefaultValueConverter {
 }
 
 export function convertBlockHeader(input: string): string {
-  return input.slice(0, 'BlockA'.length);
+  return input.slice(0, 3);
 }
