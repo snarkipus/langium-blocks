@@ -2,25 +2,30 @@ grammar Blocks
 
 entry ExecuteBlock:
     'EXECUTE'
-     uan=UANBlock?
-     sdb=SDBBlock?
+     uan=UANBlock
+     sdb=SDBBlock
     'END-INSTRUCTIONS'
 ;
 
 UANBlock:
     name='UAN-DEFINITION'
-    categories+=UANCategory+
+    categories+=UANCategory*
+    innerRefs+=CategoryRef+
     'END' 'UAN'
 ;
 
 UANCategory:
-      {infer Tools} name='TOOLS' items+=UANItem+
-    | {infer Books} name='BOOKS' items+=UANItem+
-    | {infer Cards} name='CARDS' items+=UANItem+
+      {infer Books} name='BOOKS' (items+=UANItem ('ref:' ref=[UANItem])?)+ 
+    | {infer Cards} name='CARDS' (items+=UANItem ('ref:' ref=[UANItem])?)+ 
+    | {infer Tools} name='TOOLS' (items+=UANItem ('ref:' ref=[UANItem])?)+
 ;
 
-UANItem returns string:
-    ID
+CategoryRef:
+    'category-ref' catRef=[UANCategory] ('item-ref' itemRef=[UANItem])?
+;
+
+UANItem:
+    name=ID
 ;
 
 SDBBlock:
@@ -36,11 +41,7 @@ ToolUsageBlock:
 ;
 
 ToolUsage:
-    'DESC:' tool=[Tools:UANItem] 'QTY' qty=INT
-;
-
-Property:
-    'Property' name=ID
+    'DESC:' tool=[UANItem] 'QTY' qty=INT
 ;
 
 hidden terminal WS: /\s+/;

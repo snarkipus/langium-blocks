@@ -10,7 +10,7 @@
     },
     {
       "name": "keyword.control.blocks",
-      "match": "\\b(BOOKS|CARDS|END|END-INSTRUCTIONS|EXECUTE|QTY|SCENARIO|TOOLS|UAN|UAN-DEFINITION)\\b|\\b(DESC:|RANDOM-NUMBER-SEED:|TOOL-USAGE:)\\B"
+      "match": "\\b(BOOKS|CARDS|category-ref|END|END-INSTRUCTIONS|EXECUTE|item-ref|QTY|SCENARIO|TOOLS|UAN|UAN-DEFINITION)\\b|\\b(DESC:|RANDOM-NUMBER-SEED:|ref:|TOOL-USAGE:)\\B"
     },
     {
       "name": "string.quoted.double.blocks",

@@ -5,7 +5,7 @@ import {
 import { BlocksGeneratedModule, BlocksGeneratedSharedModule } from './generated/module';
 import { BlocksValidationRegistry, BlocksValidator } from './blocks-validator';
 import { BlocksDocumentSymbolProvider } from './blocks-symbol-provider';
-import { BlocksNameProvider } from './blocks-name-provider';
+// import { BlocksNameProvider } from './blocks-name-provider';
 import { BlocksValueConverter } from './blocks-value-converter';
 
 /**
@@ -40,7 +40,7 @@ export const BlocksModule: Module<BlocksServices, PartialLangiumServices & Block
         DocumentSymbolProvider: (services) => new BlocksDocumentSymbolProvider(services),
     },
     references: {
-        NameProvider: () => new BlocksNameProvider()
+        // NameProvider: () => new BlocksNameProvider()
     }
 };
 

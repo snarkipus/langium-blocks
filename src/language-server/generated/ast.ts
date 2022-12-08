@@ -14,11 +14,10 @@ export function isUANCategory(item: unknown): item is UANCategory {
     return reflection.isInstance(item, UANCategory);
 }
 
-export type UANItem = string;
-
 export interface Books extends AstNode {
     items: Array<UANItem>
     name: 'BOOKS'
+    ref?: Reference<UANItem>
 }
 
 export const Books = 'Books';
@@ -30,6 +29,7 @@ export function isBooks(item: unknown): item is Books {
 export interface Cards extends AstNode {
     items: Array<UANItem>
     name: 'CARDS'
+    ref?: Reference<UANItem>
 }
 
 export const Cards = 'Cards';
@@ -38,25 +38,27 @@ export function isCards(item: unknown): item is Cards {
     return reflection.isInstance(item, Cards);
 }
 
+export interface CategoryRef extends AstNode {
+    readonly $container: UANBlock;
+    catRef: Reference<UANCategory>
+    itemRef?: Reference<UANItem>
+}
+
+export const CategoryRef = 'CategoryRef';
+
+export function isCategoryRef(item: unknown): item is CategoryRef {
+    return reflection.isInstance(item, CategoryRef);
+}
+
 export interface ExecuteBlock extends AstNode {
-    sdb?: SDBBlock
-    uan?: UANBlock
+    sdb: SDBBlock
+    uan: UANBlock
 }
 
 export const ExecuteBlock = 'ExecuteBlock';
 
 export function isExecuteBlock(item: unknown): item is ExecuteBlock {
     return reflection.isInstance(item, ExecuteBlock);
-}
-
-export interface Property extends AstNode {
-    name: string
-}
-
-export const Property = 'Property';
-
-export function isProperty(item: unknown): item is Property {
-    return reflection.isInstance(item, Property);
 }
 
 export interface SDBBlock extends AstNode {
@@ -75,6 +77,7 @@ export function isSDBBlock(item: unknown): item is SDBBlock {
 export interface Tools extends AstNode {
     items: Array<UANItem>
     name: 'TOOLS'
+    ref?: Reference<UANItem>
 }
 
 export const Tools = 'Tools';
@@ -86,7 +89,7 @@ export function isTools(item: unknown): item is Tools {
 export interface ToolUsage extends AstNode {
     readonly $container: ToolUsageBlock;
     qty: number
-    tool: Reference<Tools>
+    tool: Reference<UANItem>
 }
 
 export const ToolUsage = 'ToolUsage';
@@ -110,6 +113,7 @@ export function isToolUsageBlock(item: unknown): item is ToolUsageBlock {
 export interface UANBlock extends AstNode {
     readonly $container: ExecuteBlock;
     categories: Array<UANCategory>
+    innerRefs: Array<CategoryRef>
     name: 'UAN-DEFINITION'
 }
 
@@ -119,23 +123,35 @@ export function isUANBlock(item: unknown): item is UANBlock {
     return reflection.isInstance(item, UANBlock);
 }
 
+export interface UANItem extends AstNode {
+    readonly $container: Books | Cards | Tools;
+    name: string
+}
+
+export const UANItem = 'UANItem';
+
+export function isUANItem(item: unknown): item is UANItem {
+    return reflection.isInstance(item, UANItem);
+}
+
 export interface BlocksAstType {
     Books: Books
     Cards: Cards
+    CategoryRef: CategoryRef
     ExecuteBlock: ExecuteBlock
-    Property: Property
     SDBBlock: SDBBlock
     ToolUsage: ToolUsage
     ToolUsageBlock: ToolUsageBlock
     Tools: Tools
     UANBlock: UANBlock
     UANCategory: UANCategory
+    UANItem: UANItem
 }
 
 export class BlocksAstReflection extends AbstractAstReflection {
 
     getAllTypes(): string[] {
-        return ['Books', 'Cards', 'ExecuteBlock', 'Property', 'SDBBlock', 'ToolUsage', 'ToolUsageBlock', 'Tools', 'UANBlock', 'UANCategory'];
+        return ['Books', 'Cards', 'CategoryRef', 'ExecuteBlock', 'SDBBlock', 'ToolUsage', 'ToolUsageBlock', 'Tools', 'UANBlock', 'UANCategory', 'UANItem'];
     }
 
     protected override computeIsSubtype(subtype: string, supertype: string): boolean {
@@ -154,8 +170,23 @@ export class BlocksAstReflection extends AbstractAstReflection {
     getReferenceType(refInfo: ReferenceInfo): string {
         const referenceId = `${refInfo.container.$type}:${refInfo.property}`;
         switch (referenceId) {
+            case 'Books:ref': {
+                return UANItem;
+            }
+            case 'Cards:ref': {
+                return UANItem;
+            }
+            case 'CategoryRef:catRef': {
+                return UANCategory;
+            }
+            case 'CategoryRef:itemRef': {
+                return UANItem;
+            }
+            case 'Tools:ref': {
+                return UANItem;
+            }
             case 'ToolUsage:tool': {
-                return Tools;
+                return UANItem;
             }
             default: {
                 throw new Error(`${referenceId} is not a valid reference id.`);
@@ -201,7 +232,8 @@ export class BlocksAstReflection extends AbstractAstReflection {
                 return {
                     name: 'UANBlock',
                     mandatory: [
-                        { name: 'categories', type: 'array' }
+                        { name: 'categories', type: 'array' },
+                        { name: 'innerRefs', type: 'array' }
                     ]
                 };
             }
