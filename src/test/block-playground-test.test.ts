@@ -1,5 +1,5 @@
 import { BlocksServices, createBlocksServices } from "../language-server/blocks-module";
-import { DocumentState, EmptyFileSystem, IndexManager, LangiumDocument } from "langium";
+import { AstNodeDescription, DocumentState, EmptyFileSystem, IndexManager, LangiumDocument } from "langium";
 import { URI } from "vscode-uri";
 import { ExecuteBlock } from "../language-server/generated/ast";
 
@@ -64,6 +64,8 @@ describe("Blocks Playground", () => {
       await indexManager.updateContent(document); //? indexManager.allElements().toArray()
     });
 
+
+
     it("should reach the IndexedContent State (2)", () => {
       expect(document.state).toBe(DocumentState.IndexedContent);
     });
@@ -78,7 +80,7 @@ describe("Blocks Playground", () => {
       document = services.shared.workspace.LangiumDocumentFactory.fromString<ExecuteBlock>(text, uri);
       await indexManager.updateContent(document);
       const scopeComputation = services.shared.ServiceRegistry.getServices(uri).references.ScopeComputation;
-      document.precomputedScopes = await scopeComputation.computeLocalScopes(document);
+      document.precomputedScopes = await scopeComputation.computeLocalScopes(document);//?
       document.state = DocumentState.ComputedScopes;
     });
 
@@ -143,6 +145,7 @@ describe("Blocks Playground", () => {
       const diagnostics = await validator.validateDocument(document);
       document.diagnostics = diagnostics; //?
       document.state = DocumentState.Validated;
+      console.log(document);
     });
 
     it("should reach the Validated State (6)", () => {
@@ -154,3 +157,7 @@ describe("Blocks Playground", () => {
     });
   });
 });
+
+function getElements(indexManager: IndexManager): AstNodeDescription[] {
+  return indexManager.allElements().toArray();
+}
