@@ -7,6 +7,7 @@ import { BlocksValidationRegistry, BlocksValidator } from './blocks-validator';
 import { BlocksDocumentSymbolProvider } from './blocks-symbol-provider';
 // import { BlocksNameProvider } from './blocks-name-provider';
 import { BlocksValueConverter } from './blocks-value-converter';
+import { BlocksScopeComputation } from './blocks-scope-provider';
 
 /**
  * Declaration of custom services - add your own service classes here.
@@ -41,6 +42,7 @@ export const BlocksModule: Module<BlocksServices, PartialLangiumServices & Block
     },
     references: {
         // NameProvider: () => new BlocksNameProvider()
+        ScopeComputation: (services) => new BlocksScopeComputation(services)
     }
 };
 

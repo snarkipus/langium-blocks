@@ -1,5 +1,6 @@
 import { BlocksServices, createBlocksServices } from "../language-server/blocks-module";
-import { AstNodeDescription, DocumentState, EmptyFileSystem, IndexManager, LangiumDocument } from "langium";
+import { DocumentState, EmptyFileSystem, IndexManager, LangiumDocument } from "langium";
+// import {AstNodeDescription } from "langium";
 import { URI } from "vscode-uri";
 import { ExecuteBlock } from "../language-server/generated/ast";
 
@@ -120,7 +121,7 @@ describe("Blocks Playground", () => {
       document.precomputedScopes = await scopeComputation.computeLocalScopes(document);
       document.state = DocumentState.ComputedScopes;
       await services.shared.ServiceRegistry.getServices(uri).references.Linker.link(document);
-      await indexManager.updateReferences(document);
+      await indexManager.updateReferences(document); 
     });
 
     it("should reach the IndexedReferences State (5)", () => {
@@ -158,6 +159,6 @@ describe("Blocks Playground", () => {
   });
 });
 
-function getElements(indexManager: IndexManager): AstNodeDescription[] {
-  return indexManager.allElements().toArray();
-}
+// function getElements(indexManager: IndexManager): AstNodeDescription[] {
+//   return indexManager.allElements().toArray();
+// }

@@ -18,6 +18,6 @@
         comment text line n
         RANDOM-NUMBER-SEED: 12345
         TOOL-USAGE:
-          DESC: hammer QTY 2
+          DESC: pliers QTY 2
       END SCENARIO
     END-INSTRUCTIONS
