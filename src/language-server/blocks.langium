@@ -10,21 +10,26 @@ entry ExecuteBlock:
 UANBlock:
     name='UAN-DEFINITION'
     categories+=UANCategory*
-    innerRefs+=CategoryRef+
     'END' 'UAN'
 ;
 
 UANCategory:
-      {infer Books} name='BOOKS' (items+=UANItem ('ref:' ref=[UANItem])?)+ 
-    | {infer Cards} name='CARDS' (items+=UANItem ('ref:' ref=[UANItem])?)+ 
-    | {infer Tools} name='TOOLS' (items+=UANItem ('ref:' ref=[UANItem])?)+
+      {infer Books} name='BOOKS' (books+=UANBook)+
+    | {infer Cards} name='CARDS' (cards+=UANCard)+
+    | {infer Tools} name='TOOLS' (tools+=UANTool)+
 ;
 
-CategoryRef:
-    'category-ref' catRef=[UANCategory] ('item-ref' itemRef=[UANItem])?
+type UANItem = UANBook | UANCard | UANTool;
+
+UANBook:
+    name=ID
 ;
 
-UANItem:
+UANCard:
+    name=ID
+;
+
+UANTool:
     name=ID
 ;
 
@@ -32,20 +37,29 @@ SDBBlock:
     name=SDBBlockHeader
     'RANDOM-NUMBER-SEED:' seed=INT
     toolUsage=ToolUsageBlock?
+    bookUsage=BookUsageBlock?
+    cardUsage=CardUsageBlock?
     'END' 'SCENARIO'
 ;
 
 ToolUsageBlock:
     name='TOOL-USAGE:'
-    tools+=ToolUsage+
+    ('DESC:' tool=[UANTool] 'QTY' qty=INT)*
 ;
 
-ToolUsage:
-    'DESC:' tool=[UANItem] 'QTY' qty=INT
+BookUsageBlock:
+    name='BOOK-USAGE:'
+    ('DESC:' book=[UANBook] 'QTY' qty=INT)*
 ;
 
+CardUsageBlock:
+    name='CARD-USAGE:'
+    ('DESC:' card=[UANCard] 'QTY' qty=INT)*
+;
+
+hidden terminal COMMENT: /\/\/.*/;
 hidden terminal WS: /\s+/;
 terminal SDBBlockHeader: /(SDB)([\s\S]*?)(?=(RANDOM-NUMBER-SEED))/;
 terminal ID: /[_a-zA-Z][\w_]*/;
 terminal INT returns number: /[0-9]+/;
-terminal STRING: /"[^"]*"|'[^']*'/;
+// terminal STRING: /"[^"]*"|'[^']*'/;

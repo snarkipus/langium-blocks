@@ -87,19 +87,6 @@ export const BlocksGrammar = (): Grammar => loadedBlocksGrammar ?? (loadedBlocks
             "cardinality": "*"
           },
           {
-            "$type": "Assignment",
-            "feature": "innerRefs",
-            "operator": "+=",
-            "terminal": {
-              "$type": "RuleCall",
-              "rule": {
-                "$refText": "CategoryRef"
-              },
-              "arguments": []
-            },
-            "cardinality": "+"
-          },
-          {
             "$type": "Keyword",
             "value": "END"
           },
@@ -142,43 +129,16 @@ export const BlocksGrammar = (): Grammar => loadedBlocksGrammar ?? (loadedBlocks
                 }
               },
               {
-                "$type": "Group",
-                "elements": [
-                  {
-                    "$type": "Assignment",
-                    "feature": "items",
-                    "operator": "+=",
-                    "terminal": {
-                      "$type": "RuleCall",
-                      "rule": {
-                        "$refText": "UANItem"
-                      },
-                      "arguments": []
-                    }
+                "$type": "Assignment",
+                "feature": "books",
+                "operator": "+=",
+                "terminal": {
+                  "$type": "RuleCall",
+                  "rule": {
+                    "$refText": "UANBook"
                   },
-                  {
-                    "$type": "Group",
-                    "elements": [
-                      {
-                        "$type": "Keyword",
-                        "value": "ref:"
-                      },
-                      {
-                        "$type": "Assignment",
-                        "feature": "ref",
-                        "operator": "=",
-                        "terminal": {
-                          "$type": "CrossReference",
-                          "type": {
-                            "$refText": "UANItem"
-                          },
-                          "deprecatedSyntax": false
-                        }
-                      }
-                    ],
-                    "cardinality": "?"
-                  }
-                ],
+                  "arguments": []
+                },
                 "cardinality": "+"
               }
             ]
@@ -203,43 +163,16 @@ export const BlocksGrammar = (): Grammar => loadedBlocksGrammar ?? (loadedBlocks
                 }
               },
               {
-                "$type": "Group",
-                "elements": [
-                  {
-                    "$type": "Assignment",
-                    "feature": "items",
-                    "operator": "+=",
-                    "terminal": {
-                      "$type": "RuleCall",
-                      "rule": {
-                        "$refText": "UANItem"
-                      },
-                      "arguments": []
-                    }
+                "$type": "Assignment",
+                "feature": "cards",
+                "operator": "+=",
+                "terminal": {
+                  "$type": "RuleCall",
+                  "rule": {
+                    "$refText": "UANCard"
                   },
-                  {
-                    "$type": "Group",
-                    "elements": [
-                      {
-                        "$type": "Keyword",
-                        "value": "ref:"
-                      },
-                      {
-                        "$type": "Assignment",
-                        "feature": "ref",
-                        "operator": "=",
-                        "terminal": {
-                          "$type": "CrossReference",
-                          "type": {
-                            "$refText": "UANItem"
-                          },
-                          "deprecatedSyntax": false
-                        }
-                      }
-                    ],
-                    "cardinality": "?"
-                  }
-                ],
+                  "arguments": []
+                },
                 "cardinality": "+"
               }
             ]
@@ -264,43 +197,16 @@ export const BlocksGrammar = (): Grammar => loadedBlocksGrammar ?? (loadedBlocks
                 }
               },
               {
-                "$type": "Group",
-                "elements": [
-                  {
-                    "$type": "Assignment",
-                    "feature": "items",
-                    "operator": "+=",
-                    "terminal": {
-                      "$type": "RuleCall",
-                      "rule": {
-                        "$refText": "UANItem"
-                      },
-                      "arguments": []
-                    }
+                "$type": "Assignment",
+                "feature": "tools",
+                "operator": "+=",
+                "terminal": {
+                  "$type": "RuleCall",
+                  "rule": {
+                    "$refText": "UANTool"
                   },
-                  {
-                    "$type": "Group",
-                    "elements": [
-                      {
-                        "$type": "Keyword",
-                        "value": "ref:"
-                      },
-                      {
-                        "$type": "Assignment",
-                        "feature": "ref",
-                        "operator": "=",
-                        "terminal": {
-                          "$type": "CrossReference",
-                          "type": {
-                            "$refText": "UANItem"
-                          },
-                          "deprecatedSyntax": false
-                        }
-                      }
-                    ],
-                    "cardinality": "?"
-                  }
-                ],
+                  "arguments": []
+                },
                 "cardinality": "+"
               }
             ]
@@ -316,49 +222,18 @@ export const BlocksGrammar = (): Grammar => loadedBlocksGrammar ?? (loadedBlocks
     },
     {
       "$type": "ParserRule",
-      "name": "CategoryRef",
+      "name": "UANBook",
       "definition": {
-        "$type": "Group",
-        "elements": [
-          {
-            "$type": "Keyword",
-            "value": "category-ref"
+        "$type": "Assignment",
+        "feature": "name",
+        "operator": "=",
+        "terminal": {
+          "$type": "RuleCall",
+          "rule": {
+            "$refText": "ID"
           },
-          {
-            "$type": "Assignment",
-            "feature": "catRef",
-            "operator": "=",
-            "terminal": {
-              "$type": "CrossReference",
-              "type": {
-                "$refText": "UANCategory"
-              },
-              "deprecatedSyntax": false
-            }
-          },
-          {
-            "$type": "Group",
-            "elements": [
-              {
-                "$type": "Keyword",
-                "value": "item-ref"
-              },
-              {
-                "$type": "Assignment",
-                "feature": "itemRef",
-                "operator": "=",
-                "terminal": {
-                  "$type": "CrossReference",
-                  "type": {
-                    "$refText": "UANItem"
-                  },
-                  "deprecatedSyntax": false
-                }
-              }
-            ],
-            "cardinality": "?"
-          }
-        ]
+          "arguments": []
+        }
       },
       "definesHiddenTokens": false,
       "entry": false,
@@ -369,7 +244,29 @@ export const BlocksGrammar = (): Grammar => loadedBlocksGrammar ?? (loadedBlocks
     },
     {
       "$type": "ParserRule",
-      "name": "UANItem",
+      "name": "UANCard",
+      "definition": {
+        "$type": "Assignment",
+        "feature": "name",
+        "operator": "=",
+        "terminal": {
+          "$type": "RuleCall",
+          "rule": {
+            "$refText": "ID"
+          },
+          "arguments": []
+        }
+      },
+      "definesHiddenTokens": false,
+      "entry": false,
+      "fragment": false,
+      "hiddenTokens": [],
+      "parameters": [],
+      "wildcard": false
+    },
+    {
+      "$type": "ParserRule",
+      "name": "UANTool",
       "definition": {
         "$type": "Assignment",
         "feature": "name",
@@ -437,6 +334,32 @@ export const BlocksGrammar = (): Grammar => loadedBlocksGrammar ?? (loadedBlocks
             "cardinality": "?"
           },
           {
+            "$type": "Assignment",
+            "feature": "bookUsage",
+            "operator": "=",
+            "terminal": {
+              "$type": "RuleCall",
+              "rule": {
+                "$refText": "BookUsageBlock"
+              },
+              "arguments": []
+            },
+            "cardinality": "?"
+          },
+          {
+            "$type": "Assignment",
+            "feature": "cardUsage",
+            "operator": "=",
+            "terminal": {
+              "$type": "RuleCall",
+              "rule": {
+                "$refText": "CardUsageBlock"
+              },
+              "arguments": []
+            },
+            "cardinality": "?"
+          },
+          {
             "$type": "Keyword",
             "value": "END"
           },
@@ -469,17 +392,42 @@ export const BlocksGrammar = (): Grammar => loadedBlocksGrammar ?? (loadedBlocks
             }
           },
           {
-            "$type": "Assignment",
-            "feature": "tools",
-            "operator": "+=",
-            "terminal": {
-              "$type": "RuleCall",
-              "rule": {
-                "$refText": "ToolUsage"
+            "$type": "Group",
+            "elements": [
+              {
+                "$type": "Keyword",
+                "value": "DESC:"
               },
-              "arguments": []
-            },
-            "cardinality": "+"
+              {
+                "$type": "Assignment",
+                "feature": "tool",
+                "operator": "=",
+                "terminal": {
+                  "$type": "CrossReference",
+                  "type": {
+                    "$refText": "UANTool"
+                  },
+                  "deprecatedSyntax": false
+                }
+              },
+              {
+                "$type": "Keyword",
+                "value": "QTY"
+              },
+              {
+                "$type": "Assignment",
+                "feature": "qty",
+                "operator": "=",
+                "terminal": {
+                  "$type": "RuleCall",
+                  "rule": {
+                    "$refText": "INT"
+                  },
+                  "arguments": []
+                }
+              }
+            ],
+            "cardinality": "*"
           }
         ]
       },
@@ -492,41 +440,56 @@ export const BlocksGrammar = (): Grammar => loadedBlocksGrammar ?? (loadedBlocks
     },
     {
       "$type": "ParserRule",
-      "name": "ToolUsage",
+      "name": "BookUsageBlock",
       "definition": {
         "$type": "Group",
         "elements": [
           {
-            "$type": "Keyword",
-            "value": "DESC:"
-          },
-          {
             "$type": "Assignment",
-            "feature": "tool",
+            "feature": "name",
             "operator": "=",
             "terminal": {
-              "$type": "CrossReference",
-              "type": {
-                "$refText": "UANItem"
-              },
-              "deprecatedSyntax": false
+              "$type": "Keyword",
+              "value": "BOOK-USAGE:"
             }
           },
           {
-            "$type": "Keyword",
-            "value": "QTY"
-          },
-          {
-            "$type": "Assignment",
-            "feature": "qty",
-            "operator": "=",
-            "terminal": {
-              "$type": "RuleCall",
-              "rule": {
-                "$refText": "INT"
+            "$type": "Group",
+            "elements": [
+              {
+                "$type": "Keyword",
+                "value": "DESC:"
               },
-              "arguments": []
-            }
+              {
+                "$type": "Assignment",
+                "feature": "book",
+                "operator": "=",
+                "terminal": {
+                  "$type": "CrossReference",
+                  "type": {
+                    "$refText": "UANBook"
+                  },
+                  "deprecatedSyntax": false
+                }
+              },
+              {
+                "$type": "Keyword",
+                "value": "QTY"
+              },
+              {
+                "$type": "Assignment",
+                "feature": "qty",
+                "operator": "=",
+                "terminal": {
+                  "$type": "RuleCall",
+                  "rule": {
+                    "$refText": "INT"
+                  },
+                  "arguments": []
+                }
+              }
+            ],
+            "cardinality": "*"
           }
         ]
       },
@@ -536,6 +499,78 @@ export const BlocksGrammar = (): Grammar => loadedBlocksGrammar ?? (loadedBlocks
       "hiddenTokens": [],
       "parameters": [],
       "wildcard": false
+    },
+    {
+      "$type": "ParserRule",
+      "name": "CardUsageBlock",
+      "definition": {
+        "$type": "Group",
+        "elements": [
+          {
+            "$type": "Assignment",
+            "feature": "name",
+            "operator": "=",
+            "terminal": {
+              "$type": "Keyword",
+              "value": "CARD-USAGE:"
+            }
+          },
+          {
+            "$type": "Group",
+            "elements": [
+              {
+                "$type": "Keyword",
+                "value": "DESC:"
+              },
+              {
+                "$type": "Assignment",
+                "feature": "card",
+                "operator": "=",
+                "terminal": {
+                  "$type": "CrossReference",
+                  "type": {
+                    "$refText": "UANCard"
+                  },
+                  "deprecatedSyntax": false
+                }
+              },
+              {
+                "$type": "Keyword",
+                "value": "QTY"
+              },
+              {
+                "$type": "Assignment",
+                "feature": "qty",
+                "operator": "=",
+                "terminal": {
+                  "$type": "RuleCall",
+                  "rule": {
+                    "$refText": "INT"
+                  },
+                  "arguments": []
+                }
+              }
+            ],
+            "cardinality": "*"
+          }
+        ]
+      },
+      "definesHiddenTokens": false,
+      "entry": false,
+      "fragment": false,
+      "hiddenTokens": [],
+      "parameters": [],
+      "wildcard": false
+    },
+    {
+      "$type": "TerminalRule",
+      "hidden": true,
+      "name": "COMMENT",
+      "definition": {
+        "$type": "RegexToken",
+        "regex": "\\\\/\\\\/.*"
+      },
+      "fragment": false
     },
     {
       "$type": "TerminalRule",
@@ -580,22 +615,43 @@ export const BlocksGrammar = (): Grammar => loadedBlocksGrammar ?? (loadedBlocks
       },
       "fragment": false,
       "hidden": false
-    },
+    }
+  ],
+  "types": [
     {
-      "$type": "TerminalRule",
-      "name": "STRING",
-      "definition": {
-        "$type": "RegexToken",
-        "regex": "\\"[^\\"]*\\"|'[^']*'"
-      },
-      "fragment": false,
-      "hidden": false
+      "$type": "Type",
+      "typeAlternatives": [
+        {
+          "$type": "AtomType",
+          "refType": {
+            "$refText": "UANBook"
+          },
+          "isArray": false,
+          "isRef": false
+        },
+        {
+          "$type": "AtomType",
+          "refType": {
+            "$refText": "UANCard"
+          },
+          "isArray": false,
+          "isRef": false
+        },
+        {
+          "$type": "AtomType",
+          "refType": {
+            "$refText": "UANTool"
+          },
+          "isArray": false,
+          "isRef": false
+        }
+      ],
+      "name": "UANItem"
     }
   ],
   "definesHiddenTokens": false,
   "hiddenTokens": [],
   "imports": [],
   "interfaces": [],
-  "types": [],
   "usedGrammars": []
 }`));

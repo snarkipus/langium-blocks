@@ -30,9 +30,14 @@ export class BlocksDocumentSymbolProvider extends DefaultDocumentSymbolProvider 
             case 'UANBlock':
             case 'SDBBlock':    return SymbolKind.Field;
             case 'ToolUsageBlock':
+            case 'BookUsageBlock':
+            case 'CardUsageBlock': 
             case 'Tools':
             case 'Books':
             case 'Cards':       return SymbolKind.Class;
+            case 'UANTool':
+            case 'UANBook':
+            case 'UANCard':    
             case 'UANItem':     return SymbolKind.Variable;
             default: throw new Error(`getSymbolKind() called with unknown type: ${type}`);
         }

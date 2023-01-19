@@ -1,23 +1,30 @@
-    EXECUTE
-      UAN-DEFINITION
-        TOOLS
-          hammer      
-          screwdriver ref: hammer
-          pliers      ref: screwdriver
-        BOOKS
-          book1 
-          book2 ref: book1
-        CARDS
-          ace
-          queen ref: ace
-        category-ref BOOKS item-ref book1
-      END UAN
-      SDB
-        comment text line 1
-        comment text line 2
-        comment text line n
-        RANDOM-NUMBER-SEED: 12345
-        TOOL-USAGE:
-          DESC: pliers QTY 2
-      END SCENARIO
-    END-INSTRUCTIONS
+EXECUTE
+  UAN-DEFINITION
+    TOOLS
+      hammer      
+      screwdriver 
+      pliers      
+    BOOKS
+      book1 
+      book2 
+    CARDS
+      ace
+      queen 
+  END UAN
+
+  SDB
+    comment text line 1
+    comment text line 2
+    comment text line n
+    RANDOM-NUMBER-SEED: 12345
+    TOOL-USAGE:
+      DESC: pliers QTY 3
+      DESC: hammer QTY 7
+    BOOK-USAGE:
+      DESC: book1 QTY 2
+      DESC: book2 QTY 1
+    CARD-USAGE:
+      DESC: ace QTY 1
+      DESC: queen QTY 0
+  END SCENARIO
+END-INSTRUCTIONS

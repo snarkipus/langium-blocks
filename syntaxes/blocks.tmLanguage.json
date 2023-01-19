@@ -10,22 +10,23 @@
     },
     {
       "name": "keyword.control.blocks",
-      "match": "\\b(BOOKS|CARDS|category-ref|END|END-INSTRUCTIONS|EXECUTE|item-ref|QTY|SCENARIO|TOOLS|UAN|UAN-DEFINITION)\\b|\\b(DESC:|RANDOM-NUMBER-SEED:|ref:|TOOL-USAGE:)\\B"
-    },
-    {
-      "name": "string.quoted.double.blocks",
-      "begin": "\"",
-      "end": "\""
-    },
-    {
-      "name": "string.quoted.single.blocks",
-      "begin": "'",
-      "end": "'"
+      "match": "\\b(BOOKS|CARDS|END|END-INSTRUCTIONS|EXECUTE|QTY|SCENARIO|TOOLS|UAN|UAN-DEFINITION)\\b|\\b(BOOK-USAGE:|CARD-USAGE:|DESC:|RANDOM-NUMBER-SEED:|TOOL-USAGE:)\\B"
     }
   ],
   "repository": {
     "comments": {
-      "patterns": []
+      "patterns": [
+        {
+          "begin": "//",
+          "beginCaptures": {
+            "1": {
+              "name": "punctuation.whitespace.comment.leading.blocks"
+            }
+          },
+          "end": "(?=$)",
+          "name": "comment.line.blocks"
+        }
+      ]
     }
   }
 }
