@@ -1,36 +1,22 @@
 grammar Blocks
 
+import "./common"
+import "./names"
+import "./names2"
+
 entry ExecuteBlock:
     'EXECUTE'
      uan=UANBlock
      sdb=SDBBlock
+     sdb2=SDBBlock2
     'END-INSTRUCTIONS'
 ;
 
 UANBlock:
     name='UAN-DEFINITION'
     categories+=UANCategory*
+    categories2+=UANCategory2*
     'END' 'UAN'
-;
-
-UANCategory:
-      {infer Books} name='BOOKS' (books+=UANBook)+
-    | {infer Cards} name='CARDS' (cards+=UANCard)+
-    | {infer Tools} name='TOOLS' (tools+=UANTool)+
-;
-
-type UANItem = UANBook | UANCard | UANTool;
-
-UANBook:
-    name=ID
-;
-
-UANCard:
-    name=ID
-;
-
-UANTool:
-    name=ID
 ;
 
 SDBBlock:
@@ -39,6 +25,15 @@ SDBBlock:
     toolUsage=ToolUsageBlock?
     bookUsage=BookUsageBlock?
     cardUsage=CardUsageBlock?
+    'END' 'SCENARIO'
+;
+
+SDBBlock2:
+    name=SDB2BlockHeader
+    'RANDOM-NUMBER-SEED:' seed=INT
+    toolUsage=ToolUsageBlock2?
+    bookUsage=BookUsageBlock2?
+    cardUsage=CardUsageBlock2?
     'END' 'SCENARIO'
 ;
 
@@ -57,9 +52,17 @@ CardUsageBlock:
     ('DESC:' card=[UANCard] 'QTY' qty=INT)*
 ;
 
-hidden terminal COMMENT: /\/\/.*/;
-hidden terminal WS: /\s+/;
-terminal SDBBlockHeader: /(SDB)([\s\S]*?)(?=(RANDOM-NUMBER-SEED))/;
-terminal ID: /[_a-zA-Z][\w_]*/;
-terminal INT returns number: /[0-9]+/;
-// terminal STRING: /"[^"]*"|'[^']*'/;
+ToolUsageBlock2:
+    name='TOOL-USAGE:'
+    ('DESC:' tool=[UANTool2] 'QTY' qty=INT)*
+;
+
+BookUsageBlock2:
+    name='BOOK-USAGE:'
+    ('DESC:' book=[UANBook2] 'QTY' qty=INT)*
+;
+
+CardUsageBlock2:
+    name='CARD-USAGE:'
+    ('DESC:' card=[UANCard2] 'QTY' qty=INT)*
+;

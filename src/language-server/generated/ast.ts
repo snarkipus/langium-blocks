@@ -14,6 +14,14 @@ export function isUANCategory(item: unknown): item is UANCategory {
     return reflection.isInstance(item, UANCategory);
 }
 
+export type UANCategory2 = Books2 | Cards2 | Tools2;
+
+export const UANCategory2 = 'UANCategory2';
+
+export function isUANCategory2(item: unknown): item is UANCategory2 {
+    return reflection.isInstance(item, UANCategory2);
+}
+
 export type UANItem = UANBook | UANCard | UANTool;
 
 export const UANItem = 'UANItem';
@@ -33,6 +41,17 @@ export function isBooks(item: unknown): item is Books {
     return reflection.isInstance(item, Books);
 }
 
+export interface Books2 extends AstNode {
+    books: Array<UANBook2>
+    name: 'BOOKS'
+}
+
+export const Books2 = 'Books2';
+
+export function isBooks2(item: unknown): item is Books2 {
+    return reflection.isInstance(item, Books2);
+}
+
 export interface BookUsageBlock extends AstNode {
     readonly $container: SDBBlock;
     book?: Reference<UANBook>
@@ -46,6 +65,19 @@ export function isBookUsageBlock(item: unknown): item is BookUsageBlock {
     return reflection.isInstance(item, BookUsageBlock);
 }
 
+export interface BookUsageBlock2 extends AstNode {
+    readonly $container: SDBBlock2;
+    book?: Reference<UANBook2>
+    name: 'BOOK-USAGE:'
+    qty?: number
+}
+
+export const BookUsageBlock2 = 'BookUsageBlock2';
+
+export function isBookUsageBlock2(item: unknown): item is BookUsageBlock2 {
+    return reflection.isInstance(item, BookUsageBlock2);
+}
+
 export interface Cards extends AstNode {
     cards: Array<UANCard>
     name: 'CARDS'
@@ -55,6 +87,17 @@ export const Cards = 'Cards';
 
 export function isCards(item: unknown): item is Cards {
     return reflection.isInstance(item, Cards);
+}
+
+export interface Cards2 extends AstNode {
+    cards: Array<UANCard2>
+    name: 'CARDS'
+}
+
+export const Cards2 = 'Cards2';
+
+export function isCards2(item: unknown): item is Cards2 {
+    return reflection.isInstance(item, Cards2);
 }
 
 export interface CardUsageBlock extends AstNode {
@@ -70,8 +113,22 @@ export function isCardUsageBlock(item: unknown): item is CardUsageBlock {
     return reflection.isInstance(item, CardUsageBlock);
 }
 
+export interface CardUsageBlock2 extends AstNode {
+    readonly $container: SDBBlock2;
+    card?: Reference<UANCard2>
+    name: 'CARD-USAGE:'
+    qty?: number
+}
+
+export const CardUsageBlock2 = 'CardUsageBlock2';
+
+export function isCardUsageBlock2(item: unknown): item is CardUsageBlock2 {
+    return reflection.isInstance(item, CardUsageBlock2);
+}
+
 export interface ExecuteBlock extends AstNode {
     sdb: SDBBlock
+    sdb2: SDBBlock2
     uan: UANBlock
 }
 
@@ -96,6 +153,21 @@ export function isSDBBlock(item: unknown): item is SDBBlock {
     return reflection.isInstance(item, SDBBlock);
 }
 
+export interface SDBBlock2 extends AstNode {
+    readonly $container: ExecuteBlock;
+    bookUsage?: BookUsageBlock2
+    cardUsage?: CardUsageBlock2
+    name: string
+    seed: number
+    toolUsage?: ToolUsageBlock2
+}
+
+export const SDBBlock2 = 'SDBBlock2';
+
+export function isSDBBlock2(item: unknown): item is SDBBlock2 {
+    return reflection.isInstance(item, SDBBlock2);
+}
+
 export interface Tools extends AstNode {
     name: 'TOOLS'
     tools: Array<UANTool>
@@ -105,6 +177,17 @@ export const Tools = 'Tools';
 
 export function isTools(item: unknown): item is Tools {
     return reflection.isInstance(item, Tools);
+}
+
+export interface Tools2 extends AstNode {
+    name: 'TOOLS'
+    tools: Array<UANTool2>
+}
+
+export const Tools2 = 'Tools2';
+
+export function isTools2(item: unknown): item is Tools2 {
+    return reflection.isInstance(item, Tools2);
 }
 
 export interface ToolUsageBlock extends AstNode {
@@ -120,9 +203,23 @@ export function isToolUsageBlock(item: unknown): item is ToolUsageBlock {
     return reflection.isInstance(item, ToolUsageBlock);
 }
 
+export interface ToolUsageBlock2 extends AstNode {
+    readonly $container: SDBBlock2;
+    name: 'TOOL-USAGE:'
+    qty?: number
+    tool?: Reference<UANTool2>
+}
+
+export const ToolUsageBlock2 = 'ToolUsageBlock2';
+
+export function isToolUsageBlock2(item: unknown): item is ToolUsageBlock2 {
+    return reflection.isInstance(item, ToolUsageBlock2);
+}
+
 export interface UANBlock extends AstNode {
     readonly $container: ExecuteBlock;
     categories: Array<UANCategory>
+    categories2: Array<UANCategory2>
     name: 'UAN-DEFINITION'
 }
 
@@ -143,6 +240,17 @@ export function isUANBook(item: unknown): item is UANBook {
     return reflection.isInstance(item, UANBook);
 }
 
+export interface UANBook2 extends AstNode {
+    readonly $container: Books2;
+    name: string
+}
+
+export const UANBook2 = 'UANBook2';
+
+export function isUANBook2(item: unknown): item is UANBook2 {
+    return reflection.isInstance(item, UANBook2);
+}
+
 export interface UANCard extends AstNode {
     readonly $container: Cards;
     name: string
@@ -152,6 +260,17 @@ export const UANCard = 'UANCard';
 
 export function isUANCard(item: unknown): item is UANCard {
     return reflection.isInstance(item, UANCard);
+}
+
+export interface UANCard2 extends AstNode {
+    readonly $container: Cards2;
+    name: string
+}
+
+export const UANCard2 = 'UANCard2';
+
+export function isUANCard2(item: unknown): item is UANCard2 {
+    return reflection.isInstance(item, UANCard2);
 }
 
 export interface UANTool extends AstNode {
@@ -165,27 +284,49 @@ export function isUANTool(item: unknown): item is UANTool {
     return reflection.isInstance(item, UANTool);
 }
 
+export interface UANTool2 extends AstNode {
+    readonly $container: Tools2;
+    name: string
+}
+
+export const UANTool2 = 'UANTool2';
+
+export function isUANTool2(item: unknown): item is UANTool2 {
+    return reflection.isInstance(item, UANTool2);
+}
+
 export interface BlocksAstType {
     BookUsageBlock: BookUsageBlock
+    BookUsageBlock2: BookUsageBlock2
     Books: Books
+    Books2: Books2
     CardUsageBlock: CardUsageBlock
+    CardUsageBlock2: CardUsageBlock2
     Cards: Cards
+    Cards2: Cards2
     ExecuteBlock: ExecuteBlock
     SDBBlock: SDBBlock
+    SDBBlock2: SDBBlock2
     ToolUsageBlock: ToolUsageBlock
+    ToolUsageBlock2: ToolUsageBlock2
     Tools: Tools
+    Tools2: Tools2
     UANBlock: UANBlock
     UANBook: UANBook
+    UANBook2: UANBook2
     UANCard: UANCard
+    UANCard2: UANCard2
     UANCategory: UANCategory
+    UANCategory2: UANCategory2
     UANItem: UANItem
     UANTool: UANTool
+    UANTool2: UANTool2
 }
 
 export class BlocksAstReflection extends AbstractAstReflection {
 
     getAllTypes(): string[] {
-        return ['BookUsageBlock', 'Books', 'CardUsageBlock', 'Cards', 'ExecuteBlock', 'SDBBlock', 'ToolUsageBlock', 'Tools', 'UANBlock', 'UANBook', 'UANCard', 'UANCategory', 'UANItem', 'UANTool'];
+        return ['BookUsageBlock', 'BookUsageBlock2', 'Books', 'Books2', 'CardUsageBlock', 'CardUsageBlock2', 'Cards', 'Cards2', 'ExecuteBlock', 'SDBBlock', 'SDBBlock2', 'ToolUsageBlock', 'ToolUsageBlock2', 'Tools', 'Tools2', 'UANBlock', 'UANBook', 'UANBook2', 'UANCard', 'UANCard2', 'UANCategory', 'UANCategory2', 'UANItem', 'UANTool', 'UANTool2'];
     }
 
     protected override computeIsSubtype(subtype: string, supertype: string): boolean {
@@ -195,9 +336,17 @@ export class BlocksAstReflection extends AbstractAstReflection {
             case Tools: {
                 return this.isSubtype(UANCategory, supertype);
             }
+            case Books2:
+            case Cards2:
+            case Tools2: {
+                return this.isSubtype(UANCategory2, supertype);
+            }
             case UANBook:
+            case UANBook2:
             case UANCard:
-            case UANTool: {
+            case UANCard2:
+            case UANTool:
+            case UANTool2: {
                 return this.isSubtype(UANItem, supertype);
             }
             default: {
@@ -212,11 +361,20 @@ export class BlocksAstReflection extends AbstractAstReflection {
             case 'BookUsageBlock:book': {
                 return UANBook;
             }
+            case 'BookUsageBlock2:book': {
+                return UANBook2;
+            }
             case 'CardUsageBlock:card': {
                 return UANCard;
             }
+            case 'CardUsageBlock2:card': {
+                return UANCard2;
+            }
             case 'ToolUsageBlock:tool': {
                 return UANTool;
+            }
+            case 'ToolUsageBlock2:tool': {
+                return UANTool2;
             }
             default: {
                 throw new Error(`${referenceId} is not a valid reference id.`);
@@ -234,9 +392,25 @@ export class BlocksAstReflection extends AbstractAstReflection {
                     ]
                 };
             }
+            case 'Books2': {
+                return {
+                    name: 'Books2',
+                    mandatory: [
+                        { name: 'books', type: 'array' }
+                    ]
+                };
+            }
             case 'Cards': {
                 return {
                     name: 'Cards',
+                    mandatory: [
+                        { name: 'cards', type: 'array' }
+                    ]
+                };
+            }
+            case 'Cards2': {
+                return {
+                    name: 'Cards2',
                     mandatory: [
                         { name: 'cards', type: 'array' }
                     ]
@@ -250,11 +424,20 @@ export class BlocksAstReflection extends AbstractAstReflection {
                     ]
                 };
             }
+            case 'Tools2': {
+                return {
+                    name: 'Tools2',
+                    mandatory: [
+                        { name: 'tools', type: 'array' }
+                    ]
+                };
+            }
             case 'UANBlock': {
                 return {
                     name: 'UANBlock',
                     mandatory: [
-                        { name: 'categories', type: 'array' }
+                        { name: 'categories', type: 'array' },
+                        { name: 'categories2', type: 'array' }
                     ]
                 };
             }
